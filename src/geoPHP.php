@@ -339,6 +339,7 @@ class geoPHP
      */
     public static function detectFormat(&$input)
     {
+        $input = (string) $input;
         $mem = fopen('php://memory', 'x+');
         fwrite($mem, $input, 11); // Write 11 bytes - we can detect the vast majority of formats in the first 11 bytes
         fseek($mem, 0);
