@@ -65,6 +65,12 @@ jobs:
       php: 7.3
     - stage: Test
       php: 7.4
+    - stage: Test
+      php: 8.0
+    - stage: Test
+      php: 8.1
+    - stage: Test
+      php: 8.2
 
     - php: nightly
 
