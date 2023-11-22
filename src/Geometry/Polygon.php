@@ -192,7 +192,7 @@ class Polygon extends Surface
     /**
      * Find the outermost point from the centroid.
      *
-     * @returns Point The outermost point
+     * @return Point The outermost point
      */
     public function outermostPoint(): Point
     {
