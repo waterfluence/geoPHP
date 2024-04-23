@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/funiq/geoPHP/actions/workflows/php/badge.svg)](https://github.com/waterfluence/geoPHP/actions/workflows/php.yml)
+[![Build Status](https://github.com/waterfluence/geoPHP/actions/workflows/php.yml/badge.svg)](https://github.com/waterfluence/geoPHP/actions/workflows/php.yml)
 
 GeoPHP is a open-source native PHP library for doing geometry operations. It is a fork of famous [geoPHP](https://github.com/phayes/geoPHP) library by Patrick Hayes.
 
