@@ -2,9 +2,9 @@ name: GeoPHP tests
 
 on:
   push:
-    branches: ["development", "setup-github-action"]
+    branches: ["development", "v2.0", "v2.0-dev"]
   pull_request:
-    branches: ["development", "setup-github-action"]
+    branches: ["development"]
 
 permissions:
   contents: read
