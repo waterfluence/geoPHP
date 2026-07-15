@@ -1,0 +1,9 @@
+services:
+  php82:
+    build: { context: ., dockerfile: docker/php/8.2/Dockerfile }
+    volumes: [ ".:/app" ]
+    working_dir: /app
+  php83:
+    build: { context: ., dockerfile: docker/php/8.3/Dockerfile }
+    volumes: [ ".:/app" ]
+    working_dir: /app
