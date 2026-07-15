@@ -34,7 +34,13 @@
     <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing"/>
     <rule ref="Squiz.Scope.MethodScope"/>
     <rule ref="Squiz.WhiteSpace.ControlStructureSpacing"/>
-    <rule ref="Squiz.WhiteSpace.MemberVarSpacing"/>
+    <!-- PSR12 forbids a blank line after the class brace, so the first member
+         var must sit flush against it (reconciles with PSR12.Classes.OpeningBraceSpace) -->
+    <rule ref="Squiz.WhiteSpace.MemberVarSpacing">
+        <properties>
+            <property name="spacingBeforeFirst" value="0"/>
+        </properties>
+    </rule>
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <rule ref="Generic.Commenting.Todo"/>
