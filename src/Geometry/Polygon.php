@@ -15,7 +15,6 @@ use geoPHP\geoPHP;
  */
 class Polygon extends Surface
 {
-
     /**
      * @param LineString[] $components
      * @param bool|false $forceCreate
@@ -52,12 +51,12 @@ class Polygon extends Surface
         }
     }
 
-    public function geometryType()
+    public function geometryType(): string
     {
         return Geometry::POLYGON;
     }
 
-    public function dimension()
+    public function dimension(): int
     {
         return 2;
     }
@@ -68,7 +67,7 @@ class Polygon extends Surface
      *
      * @return float|null
      */
-    public function area($exteriorOnly = false, $signed = false)
+    public function area($exteriorOnly = false, $signed = false): float|null|int
     {
         if ($this->isEmpty()) {
             return 0.0;
@@ -147,9 +146,8 @@ class Polygon extends Surface
 
     /**
      * @param LineString $ring
-     * @return array
      */
-    protected function getRingCentroidAndArea($ring)
+    protected function getRingCentroidAndArea($ring): array
     {
         $area = (new Polygon([$ring]))->area(true, true);
 
@@ -207,7 +205,7 @@ class Polygon extends Surface
         return $this->components[0];
     }
 
-    public function numInteriorRings()
+    public function numInteriorRings(): int|float
     {
         if ($this->isEmpty()) {
             return 0;
@@ -234,10 +232,8 @@ class Polygon extends Surface
         //TODO: instead of this O(n^2) algorithm implement Shamos-Hoey Algorithm which is only O(n*log(n))
         foreach ($segments as $i => $segment) {
             foreach ($segments as $j => $checkSegment) {
-                if ($i != $j) {
-                    if (Geometry::segmentIntersects($segment[0], $segment[1], $checkSegment[0], $checkSegment[1])) {
-                        return false;
-                    }
+                if ($i != $j && Geometry::segmentIntersects($segment[0], $segment[1], $checkSegment[0], $checkSegment[1])) {
+                    return false;
                 }
             }
         }
@@ -260,8 +256,8 @@ class Polygon extends Surface
         $vertices = $this->getPoints();
 
         // Check if the point sits exactly on a vertex
-        if ($this->pointOnVertex($point, $vertices)) {
-            return $pointOnVertex ? true : false;
+        if ($this->pointOnVertex($point)) {
+            return $pointOnVertex;
         }
 
         // Check if the point is inside the polygon or on the boundary
@@ -277,7 +273,7 @@ class Polygon extends Surface
                 && $point->x() < max($vertex1->x(), $vertex2->x())
             ) {
                 // Check if point is on an horizontal polygon boundary
-                return $pointOnBoundary ? true : false;
+                return $pointOnBoundary;
             }
             if (
                 $point->y() > min($vertex1->y(), $vertex2->y())
@@ -291,7 +287,7 @@ class Polygon extends Surface
                         + $vertex1->x();
                 if ($xinters == $point->x()) {
                     // Check if point is on the polygon boundary (other than horizontal)
-                    return $pointOnBoundary ? true : false;
+                    return $pointOnBoundary;
                 }
                 if ($vertex1->x() == $vertex2->x() || $point->x() <= $xinters) {
                     $intersections++;
@@ -299,18 +295,13 @@ class Polygon extends Surface
             }
         }
         // If the number of edges we passed through is even, then it's in the polygon.
-        if ($intersections % 2 != 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $intersections % 2 !== 0;
     }
 
     /**
      * @param Point $point
-     * @return bool
      */
-    public function pointOnVertex($point)
+    public function pointOnVertex($point): bool
     {
         foreach ($this->getPoints() as $vertex) {
             if ($point->equals($vertex)) {
@@ -323,7 +314,6 @@ class Polygon extends Surface
     /**
      * Checks whether the given geometry is spatially inside the Polygon
      * TODO: rewrite this. Currently supports point, linestring and polygon with only outer ring
-     * @param Geometry $geometry
      * @return bool
      */
     public function contains(Geometry $geometry)
@@ -369,7 +359,7 @@ class Polygon extends Surface
         return $this->exteriorRing()->getBBox();
     }
 
-    public function boundary()
+    public function boundary(): never
     {
         // TODO: Implement boundary() method.
         throw new UnsupportedMethodException(__METHOD__);

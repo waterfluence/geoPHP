@@ -15,7 +15,6 @@ use geoPHP\geoPHP;
  */
 abstract class Collection extends Geometry
 {
-
     /** @var Geometry[]|Collection[] */
     protected $components = [];
 
@@ -54,7 +53,7 @@ abstract class Collection extends Geometry
             } else {
                 $componentType = gettype($components[$i]) !== 'object'
                     ? gettype($components[$i])
-                    : get_class($components[$i]);
+                    : $components[$i]::class;
                 throw new InvalidGeometryException(
                     'Cannot create a collection of ' . $componentType .
                     ' components, expected type is ' . $allowedComponentType
@@ -121,7 +120,7 @@ abstract class Collection extends Geometry
             /** @noinspection PhpUndefinedMethodInspection */
             $envelope = $this->getGeos()->envelope();
             /** @noinspection PhpUndefinedMethodInspection */
-            if ($envelope->typeName() == 'Point') {
+            if ($envelope->typeName() === 'Point') {
                 return geoPHP::geosToGeometry($envelope)->getBBox();
             }
 
@@ -198,7 +197,7 @@ abstract class Collection extends Geometry
      */
     public function geometryN($n)
     {
-        return isset($this->components[$n - 1]) ? $this->components[$n - 1] : null;
+        return $this->components[$n - 1] ?? null;
     }
 
     /**
@@ -235,7 +234,7 @@ abstract class Collection extends Geometry
     {
         $points = [];
         // Same as array_merge($points, $component->getPoints()), but 500× faster
-        static::getPointsRecursive($this, $points);
+        self::getPointsRecursive($this, $points);
         return $points;
     }
 
@@ -243,13 +242,13 @@ abstract class Collection extends Geometry
      * @param Collection $geometry The geometry from which points will be extracted
      * @param Point[] $points Result array as reference
      */
-    private static function getPointsRecursive($geometry, &$points)
+    private static function getPointsRecursive($geometry, &$points): void
     {
         foreach ($geometry->components as $component) {
             if ($component instanceof Point) {
                 $points[] = $component;
             } else {
-                static::getPointsRecursive($component, $points);
+                self::getPointsRecursive($component, $points);
             }
         }
     }
@@ -278,7 +277,7 @@ abstract class Collection extends Geometry
         $otherPoints = $geometry->getPoints();
 
         // First do a check to make sure they have the same number of vertices
-        if (count($thisPoints) != count($otherPoints)) {
+        if (count($thisPoints) !== count($otherPoints)) {
             return false;
         }
 
@@ -317,7 +316,7 @@ abstract class Collection extends Geometry
         return $parts;
     }
 
-    public function flatten()
+    public function flatten(): void
     {
         if ($this->hasZ() || $this->isMeasured()) {
             foreach ($this->components as $component) {

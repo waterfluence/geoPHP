@@ -26,7 +26,6 @@ use geoPHP\Geometry\MultiLineString;
  */
 class GPX implements GeoAdapter
 {
-
     protected $nss = ''; // Name-space string. eg 'georss:'
 
     /**
@@ -41,7 +40,7 @@ class GPX implements GeoAdapter
 
     protected $parseGarminRpt = false;
 
-    protected $trackFromRoute = null;
+    protected $trackFromRoute;
 
     /**
      * Read GPX string into geometry object
@@ -84,19 +83,17 @@ class GPX implements GeoAdapter
                    We try to lower-case tags and try to run again, but just once.
                 */
                 $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-                $caller = isset($backtrace[1]['function']) ? $backtrace[1]['function'] : null;
+                $caller = $backtrace[1]['function'] ?? null;
                 if ($caller && $caller !== __FUNCTION__) {
                     $gpx = preg_replace_callback(
                         "/(<\/?\w+)(.*?>)/",
-                        function ($m) {
-                            return strtolower($m[1]) . $m[2];
-                        },
+                        fn($m) => strtolower($m[1]) . $m[2],
                         $gpx
                     );
                     $geom = $this->read($gpx, $allowedElements);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw new \Exception("Cannot Read Geometry From GPX: " . $gpx);
         }
 
@@ -117,7 +114,7 @@ class GPX implements GeoAdapter
             $this->parseRoutes($xmlObject)
         );
 
-        if (isset($this->trackFromRoute)) {
+        if ($this->trackFromRoute !== null) {
             $trackFromRoute = new LineString($this->trackFromRoute);
             $trackFromRoute->setData('gpxType', 'track');
             $trackFromRoute->setData('type', 'planned route');
@@ -139,7 +136,10 @@ class GPX implements GeoAdapter
         return $geometry;
     }
 
-    protected function childElements($xml, $nodeName = '')
+    /**
+     * @return mixed[]
+     */
+    protected function childElements($xml, $nodeName = ''): array
     {
         $children = [];
         foreach ($xml->childNodes as $child) {
@@ -152,9 +152,8 @@ class GPX implements GeoAdapter
 
     /**
      * @param DOMElement $node
-     * @return Point
      */
-    protected function parsePoint($node)
+    protected function parsePoint($node): \geoPHP\Geometry\Point
     {
         $lat = $node->attributes->getNamedItem("lat")->nodeValue;
         $lon = $node->attributes->getNamedItem("lon")->nodeValue;
@@ -164,7 +163,7 @@ class GPX implements GeoAdapter
             $elevation = $ele->item(0)->nodeValue;
         }
         $point = new Point($lon, $lat, $elevation);
-        $point->setData($this->parseNodeProperties($node, $this->gpxTypes->get($node->nodeName . 'Type')));
+        $point->setData(static::parseNodeProperties($node, $this->gpxTypes->get($node->nodeName . 'Type')));
         if ($node->nodeName === 'rtept' && $this->parseGarminRpt) {
             foreach ($this->xpath->query('.//gpx:extensions/gpxx:RoutePointExtension/gpxx:rpt', $node) as $element) {
                 $this->trackFromRoute[] = $this->parsePoint($element);
@@ -177,7 +176,7 @@ class GPX implements GeoAdapter
      * @param DOMDocument $xmlObject
      * @return Point[]
      */
-    protected function parseWaypoints($xmlObject)
+    protected function parseWaypoints($xmlObject): array
     {
         if (!in_array('wpt', $this->gpxTypes->get('gpxType'))) {
             return [];
@@ -196,7 +195,7 @@ class GPX implements GeoAdapter
      * @param DOMDocument $xmlObject
      * @return LineString[]
      */
-    protected function parseTracks($xmlObject)
+    protected function parseTracks($xmlObject): array
     {
         if (!in_array('trk', $this->gpxTypes->get('gpxType'))) {
             return [];
@@ -213,14 +212,14 @@ class GPX implements GeoAdapter
                     $points[] = $this->parsePoint($trkpt);
                 }
                 // Avoids creating invalid LineString
-                $segments[] = new LineString(count($points) <> 1 ? $points : []);
+                $segments[] = new LineString(count($points) !== 1 ? $points : []);
             }
             $track = count($segments) === 0
                     ? new LineString()
                     : (count($segments) === 1
                             ? $segments[0]
                             : new MultiLineString($segments));
-            $track->setData($this->parseNodeProperties($trk, $this->gpxTypes->get('trkType')));
+            $track->setData(static::parseNodeProperties($trk, $this->gpxTypes->get('trkType')));
             $track->setData('gpxType', 'track');
             $tracks[] = $track;
         }
@@ -231,7 +230,7 @@ class GPX implements GeoAdapter
      * @param DOMDocument $xmlObject
      * @return LineString[]
      */
-    protected function parseRoutes($xmlObject)
+    protected function parseRoutes($xmlObject): array
     {
         if (!in_array('rte', $this->gpxTypes->get('gpxType'))) {
             return [];
@@ -246,7 +245,7 @@ class GPX implements GeoAdapter
                 $components[] = $this->parsePoint($routePoint);
             }
             $line = new LineString($components);
-            $line->setData($this->parseNodeProperties($rte, $this->gpxTypes->get('rteType')));
+            $line->setData(static::parseNodeProperties($rte, $this->gpxTypes->get('rteType')));
             $line->setData('gpxType', 'route');
             $lines[] = $line;
         }
@@ -306,7 +305,6 @@ class GPX implements GeoAdapter
     /**
      * Serialize geometries into a GPX string.
      *
-     * @param Geometry|GeometryCollection $geometry
      * @param string|null $namespace
      * @param array|null $allowedElements Which elements can be added to each GPX type
      *                   If not specified, every element defined in the GPX specification can be added
@@ -314,7 +312,7 @@ class GPX implements GeoAdapter
      *                   eg.: ['wptType' => ['ele', 'name'], 'trkptType' => ['ele'], 'metadataType' => null]
      * @return string The GPX string representation of the input geometries
      */
-    public function write(Geometry $geometry, $namespace = null, $allowedElements = null)
+    public function write(Geometry $geometry, $namespace = null, $allowedElements = null): string
     {
         if ($namespace) {
             $this->nss = $namespace . ':';
@@ -339,29 +337,21 @@ class GPX implements GeoAdapter
      */
     protected function geometryToGPX($geometry)
     {
-        switch ($geometry->geometryType()) {
-            case Geometry::POINT:
-                /** @var Point $geometry */
-                return $this->pointToGPX($geometry);
-            case Geometry::LINE_STRING:
-            case Geometry::MULTI_LINE_STRING:
-                /** @var LineString $geometry */
-                return $this->linestringToGPX($geometry);
-            case Geometry::POLYGON:
-            case Geometry::MULTI_POINT:
-            case Geometry::MULTI_POLYGON:
-            case Geometry::GEOMETRY_COLLECTION:
-                return $this->collectionToGPX($geometry);
-        }
-        return '';
+        return match ($geometry->geometryType()) {
+            /** @var Point $geometry */
+            Geometry::POINT => $this->pointToGPX($geometry),
+            /** @var LineString $geometry */
+            Geometry::LINE_STRING, Geometry::MULTI_LINE_STRING => $this->linestringToGPX($geometry),
+            Geometry::POLYGON, Geometry::MULTI_POINT, Geometry::MULTI_POLYGON, Geometry::GEOMETRY_COLLECTION => $this->collectionToGPX($geometry),
+            default => '',
+        };
     }
 
     /**
      * @param Point $geom
      * @param string $tag Can be "wpt", "trkpt" or "rtept"
-     * @return string
      */
-    private function pointToGPX($geom, $tag = 'wpt')
+    private function pointToGPX($geom, string $tag = 'wpt'): string
     {
         if ($geom->isEmpty() || ($tag === 'wpt' && !in_array($tag, $this->gpxTypes->get('gpxType')))) {
             return '';
@@ -376,7 +366,7 @@ class GPX implements GeoAdapter
             $node .= self::processGeometryData($geom, $this->gpxTypes->get($tag . 'Type'), $indent . "\t") .
                     $indent . "</" . $this->nss . $tag . ">\n";
             if ($geom->hasZ()) {
-                $geom->setData('ele', null);
+                $geom->setData('ele');
             }
             return $node;
         }
@@ -390,11 +380,10 @@ class GPX implements GeoAdapter
      * The LineString or each LineString of the MultiLineString will be in <trkseg> </trkseg> inside the <trk>
      *
      * @param LineString|MultiLineString $geom
-     * @return string
      */
-    private function linestringToGPX($geom)
+    private function linestringToGPX($geom): string
     {
-        $isTrack = $geom->getData('gpxType') === 'route' ? false : true;
+        $isTrack = $geom->getData('gpxType') !== 'route';
         if ($geom->isEmpty() || !in_array($isTrack ? 'trk' : 'rte', $this->gpxTypes->get('gpxType'))) {
             return '';
         }
@@ -440,16 +429,16 @@ class GPX implements GeoAdapter
         $wayPoints = $routes = $tracks = "";
 
         foreach ($geometry->getComponents() as $component) {
-            if (strpos($component->geometryType(), 'Point') !== false) {
+            if (str_contains($component->geometryType(), 'Point')) {
                 $wayPoints .= $this->geometryToGPX($component);
             }
-            if (strpos($component->geometryType(), 'LineString') !== false && $component->getData('gpxType') === 'route') {
+            if (str_contains($component->geometryType(), 'LineString') && $component->getData('gpxType') === 'route') {
                 $routes .= $this->geometryToGPX($component);
             }
-            if (strpos($component->geometryType(), 'LineString') !== false && $component->getData('gpxType') !== 'route') {
+            if (str_contains($component->geometryType(), 'LineString') && $component->getData('gpxType') !== 'route') {
                 $tracks .= $this->geometryToGPX($component);
             }
-            if (strpos($component->geometryType(), 'Point') === false && strpos($component->geometryType(), 'LineString') === false) {
+            if (!str_contains($component->geometryType(), 'Point') && !str_contains($component->geometryType(), 'LineString')) {
                 return $this->geometryToGPX($component);
             }
         }
@@ -461,9 +450,8 @@ class GPX implements GeoAdapter
      * @param Geometry $geometry
      * @param string[] $tagList Allowed tags
      * @param string $indent
-     * @return string
      */
-    protected static function processGeometryData($geometry, $tagList, $indent = "\t")
+    protected static function processGeometryData($geometry, $tagList, $indent = "\t"): string
     {
         $tags = '';
         if ($geometry->getData() !== null) {
@@ -480,9 +468,8 @@ class GPX implements GeoAdapter
      * @param string $tagName
      * @param string|array $value
      * @param string $indent
-     * @return string
      */
-    protected static function createNodes($tagName, $value, $indent)
+    protected static function createNodes($tagName, $value, $indent): string
     {
         $attributes = '';
         if (!is_array($value)) {

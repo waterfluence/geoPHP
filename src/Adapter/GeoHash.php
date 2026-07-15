@@ -26,7 +26,7 @@ class GeoHash implements GeoAdapter
     /**
      * array of neighbouring hash character maps.
      */
-    private static $neighbours =  [
+    private static array $neighbours =  [
         // north
             'top' =>  [
                     'even' => 'p0r21436x8zb9dcf5h7kjnmqesgutwvy',
@@ -52,7 +52,7 @@ class GeoHash implements GeoAdapter
     /**
      * array of bordering hash character maps.
      */
-    private static $borders =  [
+    private static array $borders =  [
         // north
             'top' =>  [
                     'even' => 'prxz',
@@ -83,32 +83,30 @@ class GeoHash implements GeoAdapter
      *
      * @return Point|Polygon the converted GeoHash
      */
-    public function read($hash, $asGrid = false)
+    public function read($hash, $asGrid = false): \geoPHP\Geometry\Point|\geoPHP\Geometry\Polygon
     {
         $decodedHash = $this->decode($hash);
         if (!$asGrid) {
             return new Point($decodedHash['centerLongitude'], $decodedHash['centerLatitude']);
-        } else {
-            return new Polygon(
-                [
-                    new LineString(
-                        [
-                            new Point($decodedHash['minLongitude'], $decodedHash['maxLatitude']),
-                            new Point($decodedHash['maxLongitude'], $decodedHash['maxLatitude']),
-                            new Point($decodedHash['maxLongitude'], $decodedHash['minLatitude']),
-                            new Point($decodedHash['minLongitude'], $decodedHash['minLatitude']),
-                            new Point($decodedHash['minLongitude'], $decodedHash['maxLatitude']),
-                        ]
-                    )
-                ]
-            );
         }
+        return new Polygon(
+            [
+                new LineString(
+                    [
+                        new Point($decodedHash['minLongitude'], $decodedHash['maxLatitude']),
+                        new Point($decodedHash['maxLongitude'], $decodedHash['maxLatitude']),
+                        new Point($decodedHash['maxLongitude'], $decodedHash['minLatitude']),
+                        new Point($decodedHash['minLongitude'], $decodedHash['minLatitude']),
+                        new Point($decodedHash['minLongitude'], $decodedHash['maxLatitude']),
+                    ]
+                )
+            ]
+        );
     }
 
     /**
      * Convert the geometry to geohash.
      *
-     * @param Geometry $geometry
      * @param float|null $precision
      * @return string the GeoHash or null when the $geometry is not a Point
      */
@@ -121,27 +119,26 @@ class GeoHash implements GeoAdapter
         if ($geometry->geometryType() === Geometry::POINT) {
             /** @var Point $geometry */
             return $this->encodePoint($geometry, $precision);
-        } else {
-            // The GeoHash is the smallest hash grid ID that fits the envelope
-            $envelope = $geometry->envelope();
-            $geoHashes = [];
-            $geohash = '';
-            foreach ($envelope->getPoints() as $point) {
-                $geoHashes[] = $this->encodePoint($point, 0.0000001);
-            }
-            $i = 0;
-            while ($i < strlen($geoHashes[0])) {
-                $char = $geoHashes[0][$i];
-                foreach ($geoHashes as $hash) {
-                    if ($hash[$i] != $char) {
-                        return $geohash;
-                    }
-                }
-                $geohash .= $char;
-                $i++;
-            }
-            return $geohash;
         }
+        // The GeoHash is the smallest hash grid ID that fits the envelope
+        $envelope = $geometry->envelope();
+        $geoHashes = [];
+        $geohash = '';
+        foreach ($envelope->getPoints() as $point) {
+            $geoHashes[] = $this->encodePoint($point, 0.0000001);
+        }
+        $i = 0;
+        while ($i < strlen($geoHashes[0])) {
+            $char = $geoHashes[0][$i];
+            foreach ($geoHashes as $hash) {
+                if ($hash[$i] != $char) {
+                    return $geohash;
+                }
+            }
+            $geohash .= $char;
+            $i++;
+        }
+        return $geohash;
     }
 
     /**
@@ -153,7 +150,7 @@ class GeoHash implements GeoAdapter
      * @return string The GeoHash
      * @throws \Exception
      */
-    private function encodePoint($point, $precision = null)
+    private function encodePoint($point, $precision = null): string
     {
         $minLatitude = -90.0000000000001;
         $maxLatitude = 90.0000000000001;
@@ -168,7 +165,7 @@ class GeoHash implements GeoAdapter
         if (!is_numeric($precision)) {
             $lap = strlen($point->y()) - strpos($point->y(), ".");
             $lop = strlen($point->x()) - strpos($point->x(), ".");
-            $precision = pow(10, -max($lap - 1, $lop - 1, 0)) / 2;
+            $precision = 10 ** -max($lap - 1, $lop - 1, 0) / 2;
         }
 
         if (
@@ -181,11 +178,11 @@ class GeoHash implements GeoAdapter
         while ($error >= $precision) {
             $chr = 0;
             for ($b = 4; $b >= 0; --$b) {
-                if ((1 & $b) == (1 & $i)) {
+                if ((1 & $b) === (1 & $i)) {
                     // even char, even bit OR odd char, odd bit...a lon
                     $next = ($minLongitude + $maxLongitude) / 2;
                     if ($point->x() > $next) {
-                        $chr |= pow(2, $b);
+                        $chr |= 2 ** $b;
                         $minLongitude = $next;
                     } else {
                         $maxLongitude = $next;
@@ -195,7 +192,7 @@ class GeoHash implements GeoAdapter
                     // odd char, even bit OR even char, odd bit...a lat
                     $next = ($minLatitude + $maxLatitude) / 2;
                     if ($point->y() > $next) {
-                        $chr |= pow(2, $b);
+                        $chr |= 2 ** $b;
                         $minLatitude = $next;
                     } else {
                         $maxLatitude = $next;
@@ -217,7 +214,7 @@ class GeoHash implements GeoAdapter
      * @param string $hash a GeoHash
      * @return array Associative array.
      */
-    private function decode($hash)
+    private function decode($hash): array
     {
         $result = [];
         $minLatitude = -90;
@@ -227,29 +224,29 @@ class GeoHash implements GeoAdapter
         $latitudeError = 90;
         $longitudeError = 180;
         for ($i = 0, $c = strlen($hash); $i < $c; $i++) {
-            $v = strpos(self::$characterTable, $hash[$i]);
-            if (1 & $i) {
-                if (16 & $v) {
+            $v = strpos((string) self::$characterTable, $hash[$i]);
+            if ((1 & $i) !== 0) {
+                if ((16 & $v) !== 0) {
                     $minLatitude = ($minLatitude + $maxLatitude) / 2;
                 } else {
                     $maxLatitude = ($minLatitude + $maxLatitude) / 2;
                 }
-                if (8 & $v) {
+                if ((8 & $v) !== 0) {
                     $minLongitude = ($minLongitude + $maxLongitude) / 2;
                 } else {
                     $maxLongitude = ($minLongitude + $maxLongitude) / 2;
                 }
-                if (4 & $v) {
+                if ((4 & $v) !== 0) {
                     $minLatitude = ($minLatitude + $maxLatitude) / 2;
                 } else {
                     $maxLatitude = ($minLatitude + $maxLatitude) / 2;
                 }
-                if (2 & $v) {
+                if ((2 & $v) !== 0) {
                     $minLongitude = ($minLongitude + $maxLongitude) / 2;
                 } else {
                     $maxLongitude = ($minLongitude + $maxLongitude) / 2;
                 }
-                if (1 & $v) {
+                if ((1 & $v) !== 0) {
                     $minLatitude = ($minLatitude + $maxLatitude) / 2;
                 } else {
                     $maxLatitude = ($minLatitude + $maxLatitude) / 2;
@@ -257,27 +254,27 @@ class GeoHash implements GeoAdapter
                 $latitudeError /= 8;
                 $longitudeError /= 4;
             } else {
-                if (16 & $v) {
+                if ((16 & $v) !== 0) {
                     $minLongitude = ($minLongitude + $maxLongitude) / 2;
                 } else {
                     $maxLongitude = ($minLongitude + $maxLongitude) / 2;
                 }
-                if (8 & $v) {
+                if ((8 & $v) !== 0) {
                     $minLatitude = ($minLatitude + $maxLatitude) / 2;
                 } else {
                     $maxLatitude = ($minLatitude + $maxLatitude) / 2;
                 }
-                if (4 & $v) {
+                if ((4 & $v) !== 0) {
                     $minLongitude = ($minLongitude + $maxLongitude) / 2;
                 } else {
                     $maxLongitude = ($minLongitude + $maxLongitude) / 2;
                 }
-                if (2 & $v) {
+                if ((2 & $v) !== 0) {
                     $minLatitude = ($minLatitude + $maxLatitude) / 2;
                 } else {
                     $maxLatitude = ($minLatitude + $maxLatitude) / 2;
                 }
-                if (1 & $v) {
+                if ((1 & $v) !== 0) {
                     $minLongitude = ($minLongitude + $maxLongitude) / 2;
                 } else {
                     $maxLongitude = ($minLongitude + $maxLongitude) / 2;
@@ -312,12 +309,12 @@ class GeoHash implements GeoAdapter
      * @param string $direction the direction of the neighbor (top, bottom, left or right)
      * @return string the geohash of the adjacent cell
      */
-    public static function adjacent($hash, $direction)
+    public static function adjacent($hash, $direction): string
     {
         $last = substr($hash, -1);
-        $type = (strlen($hash) % 2) ? 'odd' : 'even';
+        $type = (strlen($hash) % 2 !== 0) ? 'odd' : 'even';
         $base = substr($hash, 0, strlen($hash) - 1);
-        if (strpos((self::$borders[$direction][$type]), $last) !== false) {
+        if (str_contains((self::$borders[$direction][$type]), $last)) {
             $base = self::adjacent($base, $direction);
         }
         return $base . self::$characterTable[strpos(self::$neighbours[$direction][$type], $last)];

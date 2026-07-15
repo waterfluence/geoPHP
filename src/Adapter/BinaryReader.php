@@ -21,13 +21,12 @@ namespace geoPHP\Adapter;
  */
 class BinaryReader
 {
-
     const BIG_ENDIAN = 0;
     const LITTLE_ENDIAN = 1;
 
     private $buffer;
 
-    private $endianness = 0;
+    private int $endianness = 0;
 
     /**
      * BinaryReader constructor.
@@ -49,7 +48,7 @@ class BinaryReader
     /**
      * Closes the memory buffer
      */
-    public function close()
+    public function close(): void
     {
         fclose($this->buffer);
     }
@@ -57,7 +56,7 @@ class BinaryReader
     /**
      * @param int $endian self::BIG_ENDIAN or self::LITTLE_ENDIAN
      */
-    public function setEndianness($endian)
+    public function setEndianness($endian): void
     {
         $this->endianness = $endian === self::BIG_ENDIAN ? self::BIG_ENDIAN : self::LITTLE_ENDIAN;
     }
@@ -117,10 +116,8 @@ class BinaryReader
      * Reads an unsigned base-128 varint from the buffer
      *
      * Ported from https://github.com/cschwarz/wkx/blob/master/lib/binaryreader.js
-     *
-     * @return int
      */
-    public function readUVarInt()
+    public function readUVarInt(): int
     {
         $result = 0;
         $bytesRead = 0;
@@ -149,7 +146,7 @@ class BinaryReader
      * @param int $value Encrypted positive integer value
      * @return int Decoded signed integer
      */
-    public static function zigZagDecode($value)
+    public static function zigZagDecode($value): float|int
     {
         return ($value & 1) === 0 ? $value >> 1 : -($value >> 1) - 1;
     }

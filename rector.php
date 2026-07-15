@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+use Rector\Config\RectorConfig;
+use Rector\PHPUnit\Set\PHPUnitSetList;
+use Rector\Set\ValueObject\SetList;
+
+return RectorConfig::configure()
+    ->withPaths([
+        __DIR__ . '/src',
+        __DIR__ . '/tests',
+    ])
+    ->withPhpSets(php83: true)          // matches the >=8.2 floor / 8.3 target
+    ->withSets([
+        SetList::CODE_QUALITY,
+        SetList::DEAD_CODE,
+        SetList::TYPE_DECLARATION,
+        SetList::EARLY_RETURN,
+        // PHPUnit: retire doc-comment metadata for attributes (PHPUnit 12-ready)
+        PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,
+        PHPUnitSetList::PHPUNIT_CODE_QUALITY,
+    ]);

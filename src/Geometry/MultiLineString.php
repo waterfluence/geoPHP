@@ -12,7 +12,6 @@ use geoPHP\geoPHP;
  */
 class MultiLineString extends MultiCurve
 {
-
     public function __construct($components = [])
     {
         parent::__construct($components, true, LineString::class);
@@ -23,7 +22,7 @@ class MultiLineString extends MultiCurve
      */
     protected $components = [];
 
-    public function geometryType()
+    public function geometryType(): string
     {
         return Geometry::MULTI_LINE_STRING;
     }
@@ -63,10 +62,8 @@ class MultiLineString extends MultiCurve
 
     /**
      * The boundary of a MultiLineString is a MultiPoint consists of the start and end points of its non-closed LineStrings
-     *
-     * @return MultiPoint
      */
-    public function boundary()
+    public function boundary(): \geoPHP\Geometry\MultiPoint
     {
         $points = [];
         foreach ($this->components as $line) {
