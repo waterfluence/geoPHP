@@ -1,322 +1,829 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Strict comparison using \\=\\=\\= between DOMDocument and false will always evaluate to false\\.$#"
+			message: '#^Parameter \#1 \$geom of method geoPHP\\Adapter\\GPX\:\:linestringToGPX\(\) expects geoPHP\\Geometry\\LineString\|geoPHP\\Geometry\\MultiLineString, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Adapter/GPX.php
 
 		-
-			message: "#^Parameter \\#1 \\$x of class geoPHP\\\\Geometry\\\\Point constructor expects float\\|int\\|null, string given\\.$#"
+			message: '#^Parameter \#1 \$geom of method geoPHP\\Adapter\\GPX\:\:pointToGPX\(\) expects geoPHP\\Geometry\\Point, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Adapter/GPX.php
 
 		-
-			message: "#^Parameter \\#2 \\$y of class geoPHP\\\\Geometry\\\\Point constructor expects float\\|int\\|null, string given\\.$#"
+			message: '#^Parameter \#1 \$geometry of method geoPHP\\Adapter\\GPX\:\:collectionToGPX\(\) expects geoPHP\\Geometry\\Collection, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Adapter/GPX.php
 
 		-
-			message: "#^Parameter \\#3 \\$z of class geoPHP\\\\Geometry\\\\Point constructor expects float\\|int\\|null, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$node of method geoPHP\\Adapter\\GPX\:\:parsePoint\(\) expects DOMElement, DOMNameSpaceNode\|DOMNode given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Adapter/GPX.php
 
 		-
-			message: "#^Parameter \\#1 \\$geometry of method geoPHP\\\\Adapter\\\\GPX\\:\\:collectionToGPX\\(\\) expects geoPHP\\\\Geometry\\\\Collection, geoPHP\\\\Geometry\\\\Geometry given\\.$#"
+			message: '#^Parameter \#1 \$x of class geoPHP\\Geometry\\Point constructor expects float\|int\|null, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Adapter/GPX.php
 
 		-
-			message: "#^Parameter \\#1 \\$haystack of function strpos expects string, float given\\.$#"
+			message: '#^Parameter \#2 \$y of class geoPHP\\Geometry\\Point constructor expects float\|int\|null, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/GPX.php
+
+		-
+			message: '#^Parameter \#3 \$z of class geoPHP\\Geometry\\Point constructor expects float\|int\|null, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/GPX.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between DOMDocument and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/Adapter/GPX.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function strpos expects string, float given\.$#'
+			identifier: argument.type
 			count: 2
 			path: src/Adapter/GeoHash.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function strlen expects string, float given\\.$#"
+			message: '#^Parameter \#1 \$string of function strlen expects string, float given\.$#'
+			identifier: argument.type
 			count: 2
 			path: src/Adapter/GeoHash.php
 
 		-
-			message: "#^Parameter \\#1 \\$srid of method geoPHP\\\\Geometry\\\\Geometry\\:\\:setSRID\\(\\) expects int, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$srid of method geoPHP\\Geometry\\Geometry\:\:setSRID\(\) expects int, string\|null given\.$#'
+			identifier: argument.type
 			count: 2
 			path: src/Adapter/GeoJSON.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 3
-			path: src/Adapter/GeoJSON.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between DOMDocument and false will always evaluate to false\\.$#"
+			message: '#^Parameter \#1 \$geometry of method geoPHP\\Adapter\\GeoRSS\:\:collectionToGeoRSS\(\) expects geoPHP\\Geometry\\Collection, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Adapter/GeoRSS.php
 
 		-
-			message: "#^Parameter \\#1 \\$x of class geoPHP\\\\Geometry\\\\Point constructor expects float\\|int\\|null, string given\\.$#"
+			message: '#^Parameter \#1 \$geometry of method geoPHP\\Adapter\\GeoRSS\:\:linestringToGeoRSS\(\) expects geoPHP\\Geometry\\LineString, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/GeoRSS.php
+
+		-
+			message: '#^Parameter \#1 \$geometry of method geoPHP\\Adapter\\GeoRSS\:\:polygonToGeoRSS\(\) expects geoPHP\\Geometry\\Polygon, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/GeoRSS.php
+
+		-
+			message: '#^Parameter \#1 \$x of class geoPHP\\Geometry\\Point constructor expects float\|int\|null, string given\.$#'
+			identifier: argument.type
 			count: 6
 			path: src/Adapter/GeoRSS.php
 
 		-
-			message: "#^Parameter \\#2 \\$y of class geoPHP\\\\Geometry\\\\Point constructor expects float\\|int\\|null, string given\\.$#"
+			message: '#^Parameter \#2 \$y of class geoPHP\\Geometry\\Point constructor expects float\|int\|null, string given\.$#'
+			identifier: argument.type
 			count: 6
 			path: src/Adapter/GeoRSS.php
 
 		-
-			message: "#^Parameter \\#1 \\$geometry of method geoPHP\\\\Adapter\\\\GeoRSS\\:\\:linestringToGeoRSS\\(\\) expects geoPHP\\\\Geometry\\\\LineString, geoPHP\\\\Geometry\\\\Geometry given\\.$#"
+			message: '#^Strict comparison using \=\=\= between DOMDocument and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: src/Adapter/GeoRSS.php
 
 		-
-			message: "#^Parameter \\#1 \\$geometry of method geoPHP\\\\Adapter\\\\GeoRSS\\:\\:polygonToGeoRSS\\(\\) expects geoPHP\\\\Geometry\\\\Polygon, geoPHP\\\\Geometry\\\\Geometry given\\.$#"
-			count: 1
-			path: src/Adapter/GeoRSS.php
-
-		-
-			message: "#^Parameter \\#1 \\$geometry of method geoPHP\\\\Adapter\\\\GeoRSS\\:\\:collectionToGeoRSS\\(\\) expects geoPHP\\\\Geometry\\\\Collection, geoPHP\\\\Geometry\\\\Geometry given\\.$#"
-			count: 1
-			path: src/Adapter/GeoRSS.php
-
-		-
-			message: "#^Method geoPHP\\\\Adapter\\\\GoogleGeocode\\:\\:read\\(\\) should return geoPHP\\\\Geometry\\\\Geometry but returns null\\.$#"
+			message: '#^Method geoPHP\\Adapter\\GoogleGeocode\:\:read\(\) should return geoPHP\\Geometry\\Geometry but returns false\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Adapter/GoogleGeocode.php
 
 		-
-			message: "#^Method geoPHP\\\\Adapter\\\\GoogleGeocode\\:\\:read\\(\\) should return geoPHP\\\\Geometry\\\\Geometry but returns false\\.$#"
+			message: '#^Method geoPHP\\Adapter\\GoogleGeocode\:\:read\(\) should return geoPHP\\Geometry\\Geometry but returns null\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Adapter/GoogleGeocode.php
 
 		-
-			message: "#^Method geoPHP\\\\Adapter\\\\GoogleGeocode\\:\\:write\\(\\) should return array\\<object\\>\\|string\\|null but returns false\\.$#"
+			message: '#^Method geoPHP\\Adapter\\GoogleGeocode\:\:write\(\) should return array\<object\>\|string\|null but returns false\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Adapter/GoogleGeocode.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between DOMDocument and false will always evaluate to false\\.$#"
+			message: '#^PHPDoc tag @return contains unresolvable type\.$#'
+			identifier: return.unresolvableType
 			count: 1
 			path: src/Adapter/KML.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between DOMDocument and false will always evaluate to false\\.$#"
+			message: '#^Parameter \#1 \$geometry of method geoPHP\\Adapter\\KML\:\:collectionToKML\(\) expects geoPHP\\Geometry\\Collection, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/KML.php
+
+		-
+			message: '#^Parameter \#1 \$geometry of method geoPHP\\Adapter\\KML\:\:linestringToKML\(\) expects geoPHP\\Geometry\\LineString, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/KML.php
+
+		-
+			message: '#^Parameter \#1 \$geometry of method geoPHP\\Adapter\\KML\:\:pointToKML\(\) expects geoPHP\\Geometry\\Point, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/KML.php
+
+		-
+			message: '#^Parameter \#1 \$geometry of method geoPHP\\Adapter\\KML\:\:polygonToKML\(\) expects geoPHP\\Geometry\\Polygon, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/KML.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between DOMDocument and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/Adapter/KML.php
+
+		-
+			message: '#^Multiple PHPDoc @var tags above single variable assignment are not supported\.$#'
+			identifier: varTag.multipleTags
 			count: 1
 			path: src/Adapter/OSM.php
 
 		-
-			message: "#^Parameter \\#1 \\$x of class geoPHP\\\\Geometry\\\\Point constructor expects float\\|int\\|null, string given\\.$#"
+			message: '#^Offset ''tags'' on array\{nodes\: non\-empty\-list\<int\>, assigned\: bool, tags\: array, isRing\: bool\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
 			count: 1
 			path: src/Adapter/OSM.php
 
 		-
-			message: "#^Parameter \\#2 \\$y of class geoPHP\\\\Geometry\\\\Point constructor expects float\\|int\\|null, string given\\.$#"
+			message: '#^Parameter \#1 \$callback of function set_error_handler expects \(callable\(int, string, string, int\)\: bool\)\|null, Closure\(mixed, mixed, mixed, mixed, array\)\: never given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Adapter/OSM.php
 
 		-
-			message: "#^Result of && is always false\\.$#"
+			message: '#^Parameter \#1 \$x of class geoPHP\\Geometry\\Point constructor expects float\|int\|null, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Adapter/OSM.php
 
 		-
-			message: "#^Negated boolean expression is always true\\.$#"
+			message: '#^Parameter \#2 \$y of class geoPHP\\Geometry\\Point constructor expects float\|int\|null, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Adapter/OSM.php
 
 		-
-			message: "#^Result of \\|\\| is always true\\.$#"
+			message: '#^Strict comparison using \=\=\= between DOMDocument and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: src/Adapter/OSM.php
 
 		-
-			message: "#^Strict comparison using \\!\\=\\= between null and null will always evaluate to false\\.$#"
-			count: 3
-			path: src/Adapter/TWKB.php
-
-		-
-			message: "#^Parameter \\#1 \\$value of method geoPHP\\\\Adapter\\\\BinaryWriter\\:\\:writeSVarInt\\(\\) expects int, float given\\.$#"
+			message: '#^Parameter \#1 \$value of method geoPHP\\Adapter\\BinaryWriter\:\:writeSVarInt\(\) expects int, float given\.$#'
+			identifier: argument.type
 			count: 6
 			path: src/Adapter/TWKB.php
 
 		-
-			message: "#^Parameter \\#1 \\$srid of method geoPHP\\\\Geometry\\\\Geometry\\:\\:setSRID\\(\\) expects int, null given\\.$#"
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 2
+			path: src/Adapter/TWKB.php
+
+		-
+			message: '#^Parameter \#1 \$geometry of method geoPHP\\Adapter\\WKB\:\:writeMulti\(\) expects geoPHP\\Geometry\\GeometryCollection\|geoPHP\\Geometry\\MultiLineString\|geoPHP\\Geometry\\MultiPoint\|geoPHP\\Geometry\\MultiPolygon, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
+			count: 4
+			path: src/Adapter/WKB.php
+
+		-
+			message: '#^Parameter \#1 \$line of method geoPHP\\Adapter\\WKB\:\:writeLineString\(\) expects geoPHP\\Geometry\\LineString, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Adapter/WKB.php
 
 		-
-			message: "#^Left side of && is always true\\.$#"
+			message: '#^Parameter \#1 \$point of method geoPHP\\Adapter\\WKB\:\:writePoint\(\) expects geoPHP\\Geometry\\Point, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/WKB.php
+
+		-
+			message: '#^Parameter \#1 \$poly of method geoPHP\\Adapter\\WKB\:\:writePolygon\(\) expects geoPHP\\Geometry\\Polygon, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/WKB.php
+
+		-
+			message: '#^Parameter \#1 \$srid of method geoPHP\\Geometry\\Geometry\:\:setSRID\(\) expects int, null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/WKB.php
+
+		-
+			message: '#^Left side of && is always true\.$#'
+			identifier: booleanAnd.leftAlwaysTrue
 			count: 1
 			path: src/Adapter/WKT.php
 
 		-
-			message: "#^Parameter \\#1 \\$x of class geoPHP\\\\Geometry\\\\Point constructor expects float\\|int\\|null, string given\\.$#"
+			message: '#^Method geoPHP\\Adapter\\WKT\:\:parseGeometryCollection\(\) is unused\.$#'
+			identifier: method.unused
 			count: 1
 			path: src/Adapter/WKT.php
 
 		-
-			message: "#^Parameter \\#2 \\$y of class geoPHP\\\\Geometry\\\\Point constructor expects float\\|int\\|null, string given\\.$#"
+			message: '#^Method geoPHP\\Adapter\\WKT\:\:parseMultiLineString\(\) is unused\.$#'
+			identifier: method.unused
 			count: 1
 			path: src/Adapter/WKT.php
 
 		-
-			message: "#^Parameter \\#3 \\$z of class geoPHP\\\\Geometry\\\\Point constructor expects float\\|int\\|null, string\\|null given\\.$#"
+			message: '#^Method geoPHP\\Adapter\\WKT\:\:parseMultiPoint\(\) is unused\.$#'
+			identifier: method.unused
 			count: 1
 			path: src/Adapter/WKT.php
 
 		-
-			message: "#^Parameter \\#4 \\$m of class geoPHP\\\\Geometry\\\\Point constructor expects float\\|int\\|null, string\\|null given\\.$#"
+			message: '#^Method geoPHP\\Adapter\\WKT\:\:parseMultiPolygon\(\) is unused\.$#'
+			identifier: method.unused
 			count: 1
 			path: src/Adapter/WKT.php
 
 		-
-			message: "#^Parameter \\#2 \\$code of class geoPHP\\\\Exception\\\\UnsupportedMethodException constructor expects int, null given\\.$#"
-			count: 1
-			path: src/Exception/UnsupportedMethodException.php
+			message: '#^Parameter \#1 \$srid of method geoPHP\\Geometry\\Geometry\:\:setSRID\(\) expects int, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Adapter/WKT.php
 
 		-
-			message: "#^Parameter \\#1 \\$geometry of static method geoPHP\\\\Geometry\\\\Collection\\:\\:getPointsRecursive\\(\\) expects geoPHP\\\\Geometry\\\\Collection, geoPHP\\\\Geometry\\\\Geometry given\\.$#"
+			message: '#^Parameter \#1 \$x of class geoPHP\\Geometry\\Point constructor expects float\|int\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/WKT.php
+
+		-
+			message: '#^Parameter \#2 \$y of class geoPHP\\Geometry\\Point constructor expects float\|int\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/WKT.php
+
+		-
+			message: '#^Parameter \#3 \$z of class geoPHP\\Geometry\\Point constructor expects float\|int\|null, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/WKT.php
+
+		-
+			message: '#^Parameter \#4 \$m of class geoPHP\\Geometry\\Point constructor expects float\|int\|null, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Adapter/WKT.php
+
+		-
+			message: '#^Right side of \|\| is always true\.$#'
+			identifier: booleanOr.rightAlwaysTrue
+			count: 2
+			path: src/Adapter/WKT.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between ''M''\|''Z''\|''ZM'' and ''0'' will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 2
+			path: src/Adapter/WKT.php
+
+		-
+			message: '#^Parameter \#1 \$geometry of static method geoPHP\\Geometry\\Collection\:\:getPointsRecursive\(\) expects geoPHP\\Geometry\\Collection, geoPHP\\Geometry\\Geometry given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Geometry/Collection.php
 
 		-
-			message: "#^Call to function is_array\\(\\) with geoPHP\\\\Geometry\\\\Geometry will always evaluate to false\\.$#"
+			message: '#^Call to an undefined method GEOSGeometry\:\:buildArea\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: src/Geometry/Geometry.php
 
 		-
-			message: "#^Cannot call method makeValid\\(\\) on GEOSGeometry\\|false\\.$#"
+			message: '#^Call to an undefined method GEOSGeometry\:\:makeValid\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: src/Geometry/Geometry.php
 
 		-
-			message: "#^Cannot call method buildArea\\(\\) on GEOSGeometry\\|false\\.$#"
+			message: '#^Call to function is_array\(\) with geoPHP\\Geometry\\Geometry will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: src/Geometry/Geometry.php
 
 		-
-			message: "#^Method GEOSGeometry\\:\\:project\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			message: '#^Method GEOSGeometry\:\:project\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
 			count: 1
 			path: src/Geometry/Geometry.php
 
 		-
-			message: "#^Method geoPHP\\\\Geometry\\\\GeometryCollection\\:\\:centroid\\(\\) should return geoPHP\\\\Geometry\\\\Point but returns geoPHP\\\\Geometry\\\\Geometry\\|null\\.$#"
+			message: '#^Method geoPHP\\Geometry\\GeometryCollection\:\:centroid\(\) should return geoPHP\\Geometry\\Point but returns geoPHP\\Geometry\\Geometry\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Geometry/GeometryCollection.php
 
 		-
-			message: "#^Call to an undefined method geoPHP\\\\Geometry\\\\Geometry\\:\\:explodeGeometries\\(\\)\\.$#"
+			message: '#^Return type \(null\) of method geoPHP\\Geometry\\GeometryCollection\:\:boundary\(\) should be compatible with return type \(geoPHP\\Geometry\\Geometry\) of method geoPHP\\Geometry\\MultiGeometry\:\:boundary\(\)$#'
+			identifier: method.childReturnType
 			count: 1
 			path: src/Geometry/GeometryCollection.php
 
 		-
-			message: "#^Method geoPHP\\\\Geometry\\\\GeometryCollection\\:\\:boundary\\(\\) should return geoPHP\\\\Geometry\\\\Geometry but returns null\\.$#"
-			count: 1
-			path: src/Geometry/GeometryCollection.php
-
-		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^PHPDoc tag @var with type geoPHP\\Geometry\\Point is not subtype of native type null\.$#'
+			identifier: varTag.nativeType
 			count: 3
 			path: src/Geometry/LineString.php
 
 		-
-			message: "#^Method geoPHP\\\\Geometry\\\\LineString\\:\\:vincentyLength\\(\\) should return float but returns null\\.$#"
-			count: 1
-			path: src/Geometry/LineString.php
-
-		-
-			message: "#^Cannot access offset 0 on geoPHP\\\\Geometry\\\\LineString\\.$#"
-			count: 2
-			path: src/Geometry/LineString.php
-
-		-
-			message: "#^Cannot access offset 1 on geoPHP\\\\Geometry\\\\LineString\\.$#"
-			count: 2
-			path: src/Geometry/LineString.php
-
-		-
-			message: "#^Method geoPHP\\\\Geometry\\\\MultiGeometry\\:\\:boundary\\(\\) should return geoPHP\\\\Geometry\\\\Geometry but returns GEOSGeometry\\.$#"
+			message: '#^Method geoPHP\\Geometry\\MultiGeometry\:\:boundary\(\) should return geoPHP\\Geometry\\Geometry but returns GEOSGeometry\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Geometry/MultiGeometry.php
 
 		-
-			message: "#^Method geoPHP\\\\Geometry\\\\MultiLineString\\:\\:centroid\\(\\) should return geoPHP\\\\Geometry\\\\Point but returns null\\.$#"
+			message: '#^Method geoPHP\\Geometry\\MultiLineString\:\:centroid\(\) should return geoPHP\\Geometry\\Point but returns geoPHP\\Geometry\\Geometry\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Geometry/MultiLineString.php
 
 		-
-			message: "#^Method geoPHP\\\\Geometry\\\\MultiLineString\\:\\:centroid\\(\\) should return geoPHP\\\\Geometry\\\\Point but returns geoPHP\\\\Geometry\\\\Geometry\\|null\\.$#"
+			message: '#^Method geoPHP\\Geometry\\MultiLineString\:\:centroid\(\) should return geoPHP\\Geometry\\Point but returns null\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Geometry/MultiLineString.php
 
 		-
-			message: "#^Method geoPHP\\\\Geometry\\\\MultiPoint\\:\\:centroid\\(\\) should return geoPHP\\\\Geometry\\\\Point but returns geoPHP\\\\Geometry\\\\Geometry\\|null\\.$#"
+			message: '#^Method geoPHP\\Geometry\\MultiPoint\:\:centroid\(\) should return geoPHP\\Geometry\\Point but returns geoPHP\\Geometry\\Geometry\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Geometry/MultiPoint.php
 
 		-
-			message: "#^Method geoPHP\\\\Geometry\\\\MultiPoint\\:\\:explode\\(\\) should return array\\<array\\<geoPHP\\\\Geometry\\\\Point\\>\\|geoPHP\\\\Geometry\\\\LineString\\> but returns null\\.$#"
+			message: '#^Return type \(null\) of method geoPHP\\Geometry\\MultiPoint\:\:explode\(\) should be compatible with return type \(array\<array\<geoPHP\\Geometry\\Point\>\|geoPHP\\Geometry\\LineString\>\) of method geoPHP\\Geometry\\Collection\:\:explode\(\)$#'
+			identifier: method.childReturnType
 			count: 1
 			path: src/Geometry/MultiPoint.php
 
 		-
-			message: "#^Method geoPHP\\\\Geometry\\\\MultiPolygon\\:\\:centroid\\(\\) should return geoPHP\\\\Geometry\\\\Point but returns null\\.$#"
+			message: '#^Method geoPHP\\Geometry\\MultiPolygon\:\:centroid\(\) should return geoPHP\\Geometry\\Point but returns geoPHP\\Geometry\\Geometry\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Geometry/MultiPolygon.php
 
 		-
-			message: "#^Method geoPHP\\\\Geometry\\\\MultiPolygon\\:\\:centroid\\(\\) should return geoPHP\\\\Geometry\\\\Point but returns geoPHP\\\\Geometry\\\\Geometry\\|null\\.$#"
+			message: '#^Method geoPHP\\Geometry\\MultiPolygon\:\:centroid\(\) should return geoPHP\\Geometry\\Point but returns null\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Geometry/MultiPolygon.php
 
 		-
-			message: "#^Parameter \\#2 \\$allowEmptyComponents of method geoPHP\\\\Geometry\\\\Surface\\:\\:__construct\\(\\) expects bool, null given\\.$#"
+			message: '#^Method geoPHP\\Geometry\\Polygon\:\:centroid\(\) should return geoPHP\\Geometry\\Point but returns geoPHP\\Geometry\\Geometry\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Geometry/Polygon.php
 
 		-
-			message: "#^Method geoPHP\\\\Geometry\\\\Polygon\\:\\:centroid\\(\\) should return geoPHP\\\\Geometry\\\\Point but returns geoPHP\\\\Geometry\\\\Geometry\\|null\\.$#"
+			message: '#^Parameter \#2 \$allowEmptyComponents of method geoPHP\\Geometry\\Surface\:\:__construct\(\) expects bool, null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Geometry/Polygon.php
 
 		-
-			message: "#^Method geoPHP\\\\Geometry\\\\Polygon\\:\\:pointOnVertex\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Geometry/Polygon.php
-
-		-
-			message: "#^Cannot access offset 0 on geoPHP\\\\Geometry\\\\LineString\\.$#"
-			count: 1
-			path: src/Geometry/Polygon.php
-
-		-
-			message: "#^Cannot access offset 1 on geoPHP\\\\Geometry\\\\LineString\\.$#"
-			count: 1
-			path: src/Geometry/Polygon.php
-
-		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^Method geoPHP\\geoPHP\:\:buildGeometry\(\) should return geoPHP\\Geometry\\Geometry but returns null\.$#'
+			identifier: return.type
 			count: 2
 			path: src/geoPHP.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			message: '#^PHPDoc tag @var above a method has no effect\.$#'
+			identifier: varTag.misplaced
 			count: 1
 			path: src/geoPHP.php
 
 		-
-			message: "#^Method geoPHP\\\\geoPHP\\:\\:buildGeometry\\(\\) should return geoPHP\\\\Geometry\\\\Geometry but returns null\\.$#"
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:SRID\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:area\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:boundary\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:centroid\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:dimension\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:endPoint\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:exteriorRing\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:geometryType\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:getBBox\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:haversineLength\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:isClosed\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:isRing\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:length\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:numGeometries\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:numInteriorRings\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:numPoints\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:startPoint\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:x\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:y\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: tests/unit/File20120702Test.php
+
+		-
+			message: '#^Method geoPHP\\Tests\\Geometry\\CollectionStub\:\:boundary\(\) should return geoPHP\\Geometry\\Geometry but returns null\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/unit/Geometry/CollectionStub.php
+
+		-
+			message: '#^Method geoPHP\\Tests\\Geometry\\CollectionStub\:\:centroid\(\) should return geoPHP\\Geometry\\Point but returns null\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/unit/Geometry/CollectionStub.php
+
+		-
+			message: '#^Method geoPHP\\Tests\\Geometry\\CollectionStub\:\:dimension\(\) should return int but returns null\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/unit/Geometry/CollectionStub.php
+
+		-
+			message: '#^Method geoPHP\\Tests\\Geometry\\CollectionStub\:\:isSimple\(\) should return bool but returns null\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/unit/Geometry/CollectionStub.php
+
+		-
+			message: '#^PHPDoc tag @var with type geoPHP\\Geometry\\Collection is not subtype of native type geoPHP\\Tests\\Geometry\\CollectionStub\.$#'
+			identifier: varTag.nativeType
+			count: 7
+			path: tests/unit/Geometry/CollectionTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with geoPHP\\Geometry\\LineString will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/unit/Geometry/LineStringTest.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$tolerance with type float\|null is not subtype of native type int\|null\.$#'
+			identifier: parameter.phpDocType
+			count: 1
+			path: tests/unit/Geometry/LineStringTest.php
+
+		-
+			message: '#^Parameter \#1 \$points of class geoPHP\\Geometry\\LineString constructor expects array\<geoPHP\\Geometry\\Point\>, array\<int, geoPHP\\Geometry\\LineString\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/unit/Geometry/LineStringTest.php
+
+		-
+			message: '#^Parameter \#1 \$points of class geoPHP\\Geometry\\LineString constructor expects array\<geoPHP\\Geometry\\Point\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/unit/Geometry/LineStringTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with geoPHP\\Geometry\\MultiPoint will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/unit/Geometry/MultiPointTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertNull\(\) with null will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/unit/Geometry/MultiPointTest.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: tests/unit/Geometry/PointTest.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$m with type float\|int\|null is not subtype of native type int\|null\.$#'
+			identifier: parameter.phpDocType
+			count: 1
+			path: tests/unit/Geometry/PointTest.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$x with type float\|int\|null is not subtype of native type int\|null\.$#'
+			identifier: parameter.phpDocType
+			count: 1
+			path: tests/unit/Geometry/PointTest.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$y with type float\|int\|null is not subtype of native type int\|null\.$#'
+			identifier: parameter.phpDocType
+			count: 1
+			path: tests/unit/Geometry/PointTest.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$z with type float\|int\|null is not subtype of native type int\|null\.$#'
+			identifier: parameter.phpDocType
+			count: 1
+			path: tests/unit/Geometry/PointTest.php
+
+		-
+			message: '#^Parameter \#4 \$m of class geoPHP\\Geometry\\Point constructor expects float\|int\|null, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/unit/Geometry/PointTest.php
+
+		-
+			message: '#^Call to an undefined method geoPHP\\Tests\\GeosTest\:\:assertInternalType\(\)\.$#'
+			identifier: method.notFound
 			count: 2
-			path: src/geoPHP.php
+			path: tests/unit/GeosTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$points of class geoPHP\\\\Geometry\\\\LineString constructor expects array\\<geoPHP\\\\Geometry\\\\Point\\>, string given\\.$#"
+			message: '#^Call to an undefined method geoPHP\\Tests\\GeosTest\:\:assertRegExp\(\)\.$#'
+			identifier: method.notFound
 			count: 1
-			path: tests/unit/Geometry/LineStringTest.php
+			path: tests/unit/GeosTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$points of class geoPHP\\\\Geometry\\\\LineString constructor expects array\\<geoPHP\\\\Geometry\\\\Point\\>, array\\<int, geoPHP\\\\Geometry\\\\LineString\\> given\\.$#"
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:checkValidity\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
 			count: 1
-			path: tests/unit/Geometry/LineStringTest.php
+			path: tests/unit/GeosTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$argument of method geoPHP\\\\Tests\\\\MethodsTest\\:\\:_methods_tester\\(\\) expects array, string\\|null given\\.$#"
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:convexHull\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/unit/GeosTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:geos\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/unit/GeosTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:isSimple\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 2
+			path: tests/unit/GeosTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:pointOnSurface\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/unit/GeosTest.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: tests/unit/GeosTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:area\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
 			count: 1
 			path: tests/unit/MethodsTest.php
 
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:boundary\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:centroid\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:dimension\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:endPoint\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:exteriorRing\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:geometryType\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:getBBox\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:isClosed\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:isRing\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:length\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:numGeometries\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:numInteriorRings\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:numPoints\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:startPoint\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:x\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:y\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Parameter \#1 \$n of method geoPHP\\Geometry\\Geometry\:\:geometryN\(\) expects int, array given\.$#'
+			identifier: argument.type
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Parameter \#1 \$n of method geoPHP\\Geometry\\Geometry\:\:pointN\(\) expects int, array given\.$#'
+			identifier: argument.type
+			count: 3
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Parameter \#3 \$argument of method geoPHP\\Tests\\MethodsTest\:\:_methods_tester\(\) expects array, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 4
+			path: tests/unit/MethodsTest.php
+
+		-
+			message: '#^Method geoPHP\\Geometry\\Geometry\:\:hasZ\(\) invoked with 1 parameter, 0 required\.$#'
+			identifier: arguments.count
+			count: 3
+			path: tests/unit/PlaceholdersTest.php
+
+		-
+			message: '#^Offset ''argument'' on array\{name\: ''coordinateDimension''\}\|array\{name\: ''hasZ''\}\|array\{name\: ''is3D''\}\|array\{name\: ''isEmpty''\}\|array\{name\: ''isMeasured''\}\|array\{name\: ''m''\}\|array\{name\: ''z''\} in isset\(\) does not exist\.$#'
+			identifier: isset.offset
+			count: 1
+			path: tests/unit/PlaceholdersTest.php
