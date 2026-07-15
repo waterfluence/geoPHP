@@ -182,7 +182,7 @@ final class PointTest extends TestCase
     {
         $point = new Point();
 
-        $this->assertEquals(\geoPHP\Geometry\Geometry::POINT, $point->geometryType());
+        $this->assertSame(\geoPHP\Geometry\Geometry::POINT, $point->geometryType());
 
         $this->assertInstanceOf(Point::class, $point);
         $this->assertInstanceOf(\geoPHP\Geometry\Geometry::class, $point);
@@ -339,7 +339,7 @@ final class PointTest extends TestCase
      * @param float $expectedDistance
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('providerDistance')]
-    public function testDistance($otherGeometry, ?float $expectedDistance): void
+    public function testDistance(\geoPHP\Geometry\Point|\geoPHP\Geometry\LineString|\geoPHP\Geometry\MultiPoint|\geoPHP\Geometry\GeometryCollection $otherGeometry, ?float $expectedDistance): void
     {
         $point = new Point(0, 0);
 
@@ -350,7 +350,7 @@ final class PointTest extends TestCase
      * @param Geometry $otherGeometry
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('providerDistance')]
-    public function testDistanceEmpty($otherGeometry): void
+    public function testDistanceEmpty(\geoPHP\Geometry\Point|\geoPHP\Geometry\LineString|\geoPHP\Geometry\MultiPoint|\geoPHP\Geometry\GeometryCollection $otherGeometry): void
     {
         $point = new Point();
 

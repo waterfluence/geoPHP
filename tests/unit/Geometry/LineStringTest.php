@@ -92,7 +92,7 @@ final class LineStringTest extends TestCase
     {
         $line = new LineString();
 
-        $this->assertEquals(LineString::LINE_STRING, $line->geometryType());
+        $this->assertSame(LineString::LINE_STRING, $line->geometryType());
 
         $this->assertInstanceOf(LineString::class, $line);
         $this->assertInstanceOf(\geoPHP\Geometry\Curve::class, $line);
@@ -310,7 +310,7 @@ final class LineStringTest extends TestCase
      * @param Geometry $otherGeometry
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('providerDistance')]
-    public function testDistance($otherGeometry, float $expectedDistance): void
+    public function testDistance(\geoPHP\Geometry\Point|\geoPHP\Geometry\LineString|\geoPHP\Geometry\GeometryCollection $otherGeometry, float $expectedDistance): void
     {
         $line = LineString::fromArray([[0, 0], [0, 10]]);
 

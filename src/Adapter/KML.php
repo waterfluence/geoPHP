@@ -131,7 +131,7 @@ class KML implements GeoAdapter
     protected function parsePoint($xml): \geoPHP\Geometry\Point
     {
         $coordinates = $this->extractCoordinates($xml);
-        if (empty($coordinates)) {
+        if ($coordinates === []) {
             return new Point();
         }
         return new Point(
@@ -169,7 +169,7 @@ class KML implements GeoAdapter
 
         /** @noinspection SpellCheckingInspection */
         $outerBoundaryIs = $this->childElements($xml, 'outerboundaryis');
-        if (!$outerBoundaryIs) {
+        if ($outerBoundaryIs === []) {
             return new Polygon();
         }
         $outerBoundaryElement = $outerBoundaryIs[0];
@@ -219,7 +219,7 @@ class KML implements GeoAdapter
     {
         $coordinateElements = $this->childElements($xml, 'coordinates');
         $coordinates = [];
-        if (!empty($coordinateElements)) {
+        if ($coordinateElements !== []) {
             $coordinateSets = explode(' ', (string) preg_replace('/[\r\n\s\t]+/', ' ', (string) $coordinateElements[0]->nodeValue));
 
             foreach ($coordinateSets as $setString) {
@@ -242,7 +242,7 @@ class KML implements GeoAdapter
      * @param bool $namespace
      * @return string The KML string representation of the input geometries
      */
-    public function write(Geometry $geometry, $namespace = false)
+    public function write(Geometry $geometry, $namespace = false): string
     {
         if ($namespace) {
             $this->nss = $namespace . ':';
@@ -250,10 +250,7 @@ class KML implements GeoAdapter
         return $this->geometryToKML($geometry);
     }
 
-    /**
-     * @return string
-     */
-    private function geometryToKML(\geoPHP\Geometry\Geometry $geometry)
+    private function geometryToKML(\geoPHP\Geometry\Geometry $geometry): string
     {
         $type = $geometry->geometryType();
         return match ($type) {

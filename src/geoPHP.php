@@ -57,7 +57,7 @@ class geoPHP
             'osm'            => 'OSM',
     ];
 
-    public static function getAdapterMap()
+    public static function getAdapterMap(): array
     {
         return self::$adapterMap;
     }
@@ -72,7 +72,7 @@ class geoPHP
             'geometrycollection' => 'GeometryCollection',
     ];
 
-    public static function getGeometryList()
+    public static function getGeometryList(): array
     {
         return self::$geometryList;
     }

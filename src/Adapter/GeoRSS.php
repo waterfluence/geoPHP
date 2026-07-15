@@ -48,7 +48,7 @@ class GeoRSS implements GeoAdapter
      * @param boolean|string $namespace
      * @return string The georss string representation of the input geometries
      */
-    public function write(Geometry $geometry, $namespace = false)
+    public function write(Geometry $geometry, $namespace = false): string
     {
         if ($namespace) {
             $this->nss = $namespace . ':';
@@ -125,7 +125,7 @@ class GeoRSS implements GeoAdapter
         $pointElements = $this->xmlObject->getElementsByTagName('point');
         foreach ($pointElements as $pt) {
             $pointArray = $this->getPointsFromCoordinates(trim((string) $pt->firstChild->nodeValue));
-            $points[] = empty($pointArray) ? new Point() : $pointArray[0];
+            $points[] = $pointArray === [] ? new Point() : $pointArray[0];
         }
         return $points;
     }
@@ -206,9 +206,8 @@ class GeoRSS implements GeoAdapter
 
     /**
      * @param Geometry $geometry
-     * @return string|null
      */
-    protected function geometryToGeoRSS($geometry)
+    protected function geometryToGeoRSS($geometry): ?string
     {
         $type = $geometry->geometryType();
         return match ($type) {

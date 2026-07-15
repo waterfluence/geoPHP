@@ -114,7 +114,7 @@ class BinaryWriter
      * @param int $value
      * @return string The integer as a binary string
      */
-    public function writeSVarInt($value)
+    public function writeSVarInt($value): string
     {
         return $this->writeUVarInt(self::zigZagEncode($value));
     }

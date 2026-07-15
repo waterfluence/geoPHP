@@ -276,8 +276,9 @@ class WKT implements GeoAdapter
         if ($geometry->isEmpty()) {
             return strtoupper($geometry->geometryType()) . ' EMPTY';
         }
+        $data = $this->extractData($geometry);
 
-        if ($data = $this->extractData($geometry)) {
+        if ($data !== '' && $data !== '0') {
             $extension = '';
             if ($this->hasZ) {
                 $extension .= 'Z';
@@ -338,7 +339,7 @@ class WKT implements GeoAdapter
                     $data = $this->extractData($component);
                     $parts[] = strtoupper($component->geometryType())
                             . ($extension !== '' && $extension !== '0' ? ' ' . $extension : '')
-                            . ($data ? ' (' . $data . ')' : ' EMPTY');
+                            . ($data !== '' && $data !== '0' ? ' (' . $data . ')' : ' EMPTY');
                 }
                 return implode(', ', $parts);
         }

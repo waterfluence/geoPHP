@@ -64,7 +64,7 @@ class BinaryReader
     /**
      * @return int Returns 0 if reader is in BigEndian mode or 1 if in LittleEndian mode
      */
-    public function getEndianness()
+    public function getEndianness(): int
     {
         return $this->endianness;
     }
@@ -96,7 +96,7 @@ class BinaryReader
     public function readUInt32()
     {
         $int32 = fread($this->buffer, 4);
-        return $int32 !== '' ? current(unpack($this->endianness == self::LITTLE_ENDIAN ? 'V' : 'N', $int32)) : null;
+        return $int32 !== '' ? current(unpack($this->endianness === self::LITTLE_ENDIAN ? 'V' : 'N', $int32)) : null;
     }
 
     /**
@@ -107,7 +107,7 @@ class BinaryReader
     public function readDoubles($length = 1)
     {
         $bin = fread($this->buffer, $length);
-        return $this->endianness == self::LITTLE_ENDIAN
+        return $this->endianness === self::LITTLE_ENDIAN
                 ? array_values(unpack("d*", $bin))
                 : array_reverse(unpack("d*", strrev($bin)));
     }
@@ -135,7 +135,7 @@ class BinaryReader
      *
      * @return int
      */
-    public function readSVarInt()
+    public function readSVarInt(): float|int
     {
         return self::zigZagDecode($this->readUVarInt());
     }

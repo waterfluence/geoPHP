@@ -87,7 +87,7 @@ class GPX implements GeoAdapter
                 if ($caller && $caller !== __FUNCTION__) {
                     $gpx = preg_replace_callback(
                         "/(<\/?\w+)(.*?>)/",
-                        fn($m) => strtolower($m[1]) . $m[2],
+                        fn($m): string => strtolower($m[1]) . $m[2],
                         $gpx
                     );
                     $geom = $this->read($gpx, $allowedElements);
@@ -423,7 +423,7 @@ class GPX implements GeoAdapter
     public function collectionToGPX($geometry)
     {
         $metadata = self::processGeometryData($geometry, $this->gpxTypes->get('metadataType'));
-        $metadata = empty($metadata) || !in_array('metadataType', $this->gpxTypes->get('gpxType'))
+        $metadata = $metadata === '' || $metadata === '0' || !in_array('metadataType', $this->gpxTypes->get('gpxType'))
                 ? ''
                 : "<metadata>\n{$metadata}</metadata>\n\n";
         $wayPoints = $routes = $tracks = "";

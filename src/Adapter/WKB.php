@@ -80,7 +80,7 @@ class WKB implements GeoAdapter
      *
      * @throws \Exception
      */
-    public function read($wkb, $isHexString = false)
+    public function read($wkb, $isHexString = false): \geoPHP\Geometry\GeometryCollection|\geoPHP\Geometry\LineString|\geoPHP\Geometry\MultiLineString|\geoPHP\Geometry\MultiPoint|\geoPHP\Geometry\MultiPolygon|\geoPHP\Geometry\Point|\geoPHP\Geometry\Polygon|null
     {
         if ($isHexString) {
             $wkb = pack('H*', $wkb);
@@ -103,7 +103,7 @@ class WKB implements GeoAdapter
      * @return Geometry
      * @throws \Exception
      */
-    protected function getGeometry()
+    protected function getGeometry(): \geoPHP\Geometry\Point|\geoPHP\Geometry\LineString|\geoPHP\Geometry\Polygon|\geoPHP\Geometry\GeometryCollection|\geoPHP\Geometry\MultiLineString|\geoPHP\Geometry\MultiPoint|\geoPHP\Geometry\MultiPolygon|null
     {
         $this->hasZ = false;
         $this->hasM = false;
@@ -196,7 +196,7 @@ class WKB implements GeoAdapter
         $components = [];
         for ($i = 0; $i < $lineLength; ++$i) {
             $point = $this->getPoint();
-            if ($point) {
+            if ($point instanceof \geoPHP\Geometry\Point) {
                 $components[] = $point;
             }
         }

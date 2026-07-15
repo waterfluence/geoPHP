@@ -204,7 +204,7 @@ class GeoJSON implements GeoAdapter
      *
      * @return string|array The GeoJSON string
      */
-    public function write(Geometry $geometry, $returnAsArray = false)
+    public function write(Geometry $geometry, $returnAsArray = false): string|array|false
     {
         return $returnAsArray
             ? $this->getArray($geometry)

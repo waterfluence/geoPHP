@@ -45,7 +45,7 @@ class GoogleGeocode implements GeoAdapter
      * @return Geometry|GeometryCollection
      * @throws \Exception If geocoding fails
      */
-    public function read($address, $apiKey = null, $returnType = 'point', $bounds = false, $returnMultiple = false)
+    public function read($address, $apiKey = null, $returnType = 'point', $bounds = false, $returnMultiple = false): \geoPHP\Geometry\Point|\geoPHP\Geometry\Polygon|\geoPHP\Geometry\MultiPoint|\geoPHP\Geometry\MultiPolygon|null|false
     {
         if (is_array($address)) {
             $address = implode(',', $address);

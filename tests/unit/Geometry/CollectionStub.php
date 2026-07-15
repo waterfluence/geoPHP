@@ -16,127 +16,127 @@ use geoPHP\Geometry\Collection;
  */
 final class CollectionStub extends Collection
 {
-    public function dimension()
+    public function dimension(): null
     {
         return null;
     }
 
-    public function geometryType()
+    public function geometryType(): string
     {
         return 'CollectionStub';
     }
 
-    public function isSimple()
+    public function isSimple(): null
     {
         return null;
     }
 
-    public function boundary()
+    public function boundary(): null
     {
         return null;
     }
 
-    public function area()
+    public function area(): null
     {
         return null;
     }
 
-    public function centroid()
+    public function centroid(): null
     {
         return null;
     }
 
-    public function length()
+    public function length(): null
     {
         return null;
     }
 
-    public function length3D()
+    public function length3D(): null
     {
         return null;
     }
 
-    public function startPoint()
+    public function startPoint(): null
     {
         return null;
     }
 
-    public function endPoint()
+    public function endPoint(): null
     {
         return null;
     }
 
-    public function isRing()
+    public function isRing(): null
     {
         return null;
     }
 
-    public function isClosed()
+    public function isClosed(): null
     {
         return null;
     }
 
-    public function pointN($n)
+    public function pointN($n): null
     {
         return null;
     }
 
-    public function exteriorRing()
+    public function exteriorRing(): null
     {
         return null;
     }
 
-    public function numInteriorRings()
+    public function numInteriorRings(): null
     {
         return null;
     }
 
-    public function interiorRingN($n)
+    public function interiorRingN($n): null
     {
         return null;
     }
 
-    public function greatCircleLength($radius = null)
+    public function greatCircleLength($radius = null): null
     {
         return null;
     }
 
-    public function haversineLength()
+    public function haversineLength(): null
     {
         return null;
     }
 
-    public function minimumZ()
+    public function minimumZ(): null
     {
         return null;
     }
 
-    public function maximumZ()
+    public function maximumZ(): null
     {
         return null;
     }
 
-    public function minimumM()
+    public function minimumM(): null
     {
         return null;
     }
 
-    public function maximumM()
+    public function maximumM(): null
     {
         return null;
     }
 
-    public function zDifference()
+    public function zDifference(): null
     {
         return null;
     }
 
-    public function elevationGain($verticalTolerance = 0)
+    public function elevationGain($verticalTolerance = 0): null
     {
         return null;
     }
 
-    public function elevationLoss($verticalTolerance = 0)
+    public function elevationLoss($verticalTolerance = 0): null
     {
         return null;
     }

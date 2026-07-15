@@ -85,7 +85,7 @@ class Point extends Geometry
      *
      * @return float The X coordinate
      */
-    public function x()
+    public function x(): ?float
     {
         return $this->x;
     }
@@ -95,7 +95,7 @@ class Point extends Geometry
      *
      * @return float The Y coordinate
      */
-    public function y()
+    public function y(): ?float
     {
         return $this->y;
     }
@@ -105,7 +105,7 @@ class Point extends Geometry
      *
      * @return float The Z coordinate or NULL is not a 3D point
      */
-    public function z()
+    public function z(): ?float
     {
         return $this->z;
     }
@@ -115,7 +115,7 @@ class Point extends Geometry
      *
      * @return float The measured value
      */
-    public function m()
+    public function m(): ?float
     {
         return $this->m;
     }
@@ -312,22 +312,22 @@ class Point extends Geometry
         return $distance;
     }
 
-    public function minimumZ()
+    public function minimumZ(): ?float
     {
         return $this->hasZ ? $this->z() : null;
     }
 
-    public function maximumZ()
+    public function maximumZ(): ?float
     {
         return $this->hasZ ? $this->z() : null;
     }
 
-    public function minimumM()
+    public function minimumM(): ?float
     {
         return $this->isMeasured ? $this->m() : null;
     }
 
-    public function maximumM()
+    public function maximumM(): ?float
     {
         return $this->isMeasured ? $this->m() : null;
     }

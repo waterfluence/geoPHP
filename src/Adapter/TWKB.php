@@ -442,9 +442,8 @@ class TWKB implements GeoAdapter
 
     /**
      * @param LineString $geometry
-     * @return string
      */
-    protected function writeLineString($geometry)
+    protected function writeLineString($geometry): string
     {
         $twkb = $this->writer->writeUVarInt($geometry->numPoints());
         foreach ($geometry->getComponents() as $component) {
@@ -455,9 +454,8 @@ class TWKB implements GeoAdapter
 
     /**
      * @param Polygon $geometry
-     * @return string
      */
-    protected function writePolygon($geometry)
+    protected function writePolygon($geometry): string
     {
         $twkb = $this->writer->writeUVarInt($geometry->numGeometries());
         foreach ($geometry->getComponents() as $component) {
@@ -468,9 +466,8 @@ class TWKB implements GeoAdapter
 
     /**
      * @param Collection $geometry
-     * @return string
      */
-    protected function writeMulti($geometry)
+    protected function writeMulti($geometry): string
     {
         $twkb = $this->writer->writeUVarInt($geometry->numGeometries());
         //if ($geometry->hasIdList()) {
