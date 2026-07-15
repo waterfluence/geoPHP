@@ -49,13 +49,13 @@ parameters:
 			path: src/Adapter/GPX.php
 
 		-
-			message: '#^Parameter \#1 \$haystack of function strpos expects string, float given\.$#'
+			message: '#^Parameter \#1 \$haystack of function strpos expects string, float\|null given\.$#'
 			identifier: argument.type
 			count: 2
 			path: src/Adapter/GeoHash.php
 
 		-
-			message: '#^Parameter \#1 \$string of function strlen expects string, float given\.$#'
+			message: '#^Parameter \#1 \$string of function strlen expects string, float\|null given\.$#'
 			identifier: argument.type
 			count: 2
 			path: src/Adapter/GeoHash.php
@@ -103,20 +103,14 @@ parameters:
 			path: src/Adapter/GeoRSS.php
 
 		-
-			message: '#^Method geoPHP\\Adapter\\GoogleGeocode\:\:read\(\) should return geoPHP\\Geometry\\Geometry but returns false\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Adapter/GoogleGeocode.php
-
-		-
-			message: '#^Method geoPHP\\Adapter\\GoogleGeocode\:\:read\(\) should return geoPHP\\Geometry\\Geometry but returns null\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Adapter/GoogleGeocode.php
-
-		-
 			message: '#^Method geoPHP\\Adapter\\GoogleGeocode\:\:write\(\) should return array\<object\>\|string\|null but returns false\.$#'
 			identifier: return.type
+			count: 1
+			path: src/Adapter/GoogleGeocode.php
+
+		-
+			message: '#^PHPDoc tag @return with type geoPHP\\Geometry\\Geometry is not subtype of native type geoPHP\\Geometry\\MultiPoint\|geoPHP\\Geometry\\MultiPolygon\|geoPHP\\Geometry\\Point\|geoPHP\\Geometry\\Polygon\|false\|null\.$#'
+			identifier: return.phpDocType
 			count: 1
 			path: src/Adapter/GoogleGeocode.php
 
@@ -203,6 +197,12 @@ parameters:
 			identifier: ternary.alwaysTrue
 			count: 2
 			path: src/Adapter/TWKB.php
+
+		-
+			message: '#^PHPDoc tag @return with type geoPHP\\Geometry\\Geometry is not subtype of native type geoPHP\\Geometry\\GeometryCollection\|geoPHP\\Geometry\\LineString\|geoPHP\\Geometry\\MultiLineString\|geoPHP\\Geometry\\MultiPoint\|geoPHP\\Geometry\\MultiPolygon\|geoPHP\\Geometry\\Point\|geoPHP\\Geometry\\Polygon\|null\.$#'
+			identifier: return.phpDocType
+			count: 2
+			path: src/Adapter/WKB.php
 
 		-
 			message: '#^Parameter \#1 \$geometry of method geoPHP\\Adapter\\WKB\:\:writeMulti\(\) expects geoPHP\\Geometry\\GeometryCollection\|geoPHP\\Geometry\\MultiLineString\|geoPHP\\Geometry\\MultiPoint\|geoPHP\\Geometry\\MultiPolygon, geoPHP\\Geometry\\Geometry given\.$#'
@@ -541,26 +541,26 @@ parameters:
 			path: tests/unit/File20120702Test.php
 
 		-
-			message: '#^Method geoPHP\\Tests\\Geometry\\CollectionStub\:\:boundary\(\) should return geoPHP\\Geometry\\Geometry but returns null\.$#'
-			identifier: return.type
+			message: '#^Return type \(null\) of method geoPHP\\Tests\\Geometry\\CollectionStub\:\:boundary\(\) should be compatible with return type \(geoPHP\\Geometry\\Geometry\) of method geoPHP\\Geometry\\Geometry\:\:boundary\(\)$#'
+			identifier: method.childReturnType
 			count: 1
 			path: tests/unit/Geometry/CollectionStub.php
 
 		-
-			message: '#^Method geoPHP\\Tests\\Geometry\\CollectionStub\:\:centroid\(\) should return geoPHP\\Geometry\\Point but returns null\.$#'
-			identifier: return.type
+			message: '#^Return type \(null\) of method geoPHP\\Tests\\Geometry\\CollectionStub\:\:centroid\(\) should be compatible with return type \(geoPHP\\Geometry\\Point\) of method geoPHP\\Geometry\\Geometry\:\:centroid\(\)$#'
+			identifier: method.childReturnType
 			count: 1
 			path: tests/unit/Geometry/CollectionStub.php
 
 		-
-			message: '#^Method geoPHP\\Tests\\Geometry\\CollectionStub\:\:dimension\(\) should return int but returns null\.$#'
-			identifier: return.type
+			message: '#^Return type \(null\) of method geoPHP\\Tests\\Geometry\\CollectionStub\:\:dimension\(\) should be compatible with return type \(int\) of method geoPHP\\Geometry\\Geometry\:\:dimension\(\)$#'
+			identifier: method.childReturnType
 			count: 1
 			path: tests/unit/Geometry/CollectionStub.php
 
 		-
-			message: '#^Method geoPHP\\Tests\\Geometry\\CollectionStub\:\:isSimple\(\) should return bool but returns null\.$#'
-			identifier: return.type
+			message: '#^Return type \(null\) of method geoPHP\\Tests\\Geometry\\CollectionStub\:\:isSimple\(\) should be compatible with return type \(bool\) of method geoPHP\\Geometry\\Geometry\:\:isSimple\(\)$#'
+			identifier: method.childReturnType
 			count: 1
 			path: tests/unit/Geometry/CollectionStub.php
 
@@ -573,6 +573,12 @@ parameters:
 		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertNotNull\(\) with geoPHP\\Geometry\\LineString will always evaluate to true\.$#'
 			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/unit/Geometry/LineStringTest.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$otherGeometry with type geoPHP\\Geometry\\Geometry is not subtype of native type geoPHP\\Geometry\\GeometryCollection\|geoPHP\\Geometry\\LineString\|geoPHP\\Geometry\\Point\.$#'
+			identifier: parameter.phpDocType
 			count: 1
 			path: tests/unit/Geometry/LineStringTest.php
 
@@ -616,6 +622,12 @@ parameters:
 			message: '#^PHPDoc tag @param for parameter \$m with type float\|int\|null is not subtype of native type int\|null\.$#'
 			identifier: parameter.phpDocType
 			count: 1
+			path: tests/unit/Geometry/PointTest.php
+
+		-
+			message: '#^PHPDoc tag @param for parameter \$otherGeometry with type geoPHP\\Geometry\\Geometry is not subtype of native type geoPHP\\Geometry\\GeometryCollection\|geoPHP\\Geometry\\LineString\|geoPHP\\Geometry\\MultiPoint\|geoPHP\\Geometry\\Point\.$#'
+			identifier: parameter.phpDocType
+			count: 2
 			path: tests/unit/Geometry/PointTest.php
 
 		-
