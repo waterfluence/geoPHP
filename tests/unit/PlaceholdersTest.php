@@ -1,32 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace geoPHP\Tests;
 
 use \geoPHP\geoPHP;
 use PHPUnit\Framework\TestCase;
 
-class PlaceholdersTest extends TestCase
+final class PlaceholdersTest extends TestCase
 {
 
-  function testPlaceholders()
+  function testPlaceholders(): void
   {
     foreach (scandir('tests/input') as $file) {
       $parts = explode('.',$file);
-      if ($parts[0]) {
+      if ($parts[0] !== '' && $parts[0] !== '0') {
         $format = $parts[1];
         $value = file_get_contents('tests/input/'.$file);
         //echo "\nloading: " . $file . " for format: " . $format;
         $geometry = geoPHP::load($value, $format);
 
-        $placeholders = array(
-          array('name' => 'hasZ'),
-          array('name' => 'is3D'),
-          array('name' => 'isMeasured'),
-          array('name' => 'isEmpty'),
-          array('name' => 'coordinateDimension'),
-          array('name' => 'z'),
-          array('name' => 'm'),
-        );
+        $placeholders = [
+          ['name' => 'hasZ'],
+          ['name' => 'is3D'],
+          ['name' => 'isMeasured'],
+          ['name' => 'isEmpty'],
+          ['name' => 'coordinateDimension'],
+          ['name' => 'z'],
+          ['name' => 'm'],
+        ];
 
         foreach($placeholders as $method) {
           $argument = NULL;

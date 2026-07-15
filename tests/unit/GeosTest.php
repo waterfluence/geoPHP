@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace geoPHP\Tests;
 
 use \geoPHP\geoPHP;
 use PHPUnit\Framework\TestCase;
 
-class GeosTest extends TestCase
+final class GeosTest extends TestCase
 {
 
-  function testGeos()
+  function testGeos(): void
   {
     if (!geoPHP::geosInstalled()) {
       $this->markTestSkipped('GEOS not installed');
@@ -17,7 +19,7 @@ class GeosTest extends TestCase
 
     foreach (scandir('./input') as $file) {
       $parts = explode('.',$file);
-      if ($parts[0]) {
+      if ($parts[0] !== '' && $parts[0] !== '0') {
         if ($parts[0] == 'countries_ne_110m') {
           // Due to a bug in GEOS we have to skip some tests
           // It drops TopologyException for valid geometries
@@ -30,34 +32,34 @@ class GeosTest extends TestCase
         echo "\nloading: " . $file . " for format: " . $format;
         $geometry = geoPHP::load($value, $format);
 
-        $geosMethods = array(
-          array('name' => 'geos'),
-          array('name' => 'setGeos', 'argument' => $geometry->geos()),
-          array('name' => 'pointOnSurface'),
-          array('name' => 'equals', 'argument' => $geometry),
-          array('name' => 'equalsExact', 'argument' => $geometry),
-          array('name' => 'relate', 'argument' => $geometry),
-          array('name' => 'checkValidity'),
-          array('name' => 'isSimple'),
-          array('name' => 'buffer', 'argument' => '10'),
-          array('name' => 'intersection', 'argument' => $geometry),
-          array('name' => 'convexHull'),
-          array('name' => 'difference', 'argument' => $geometry),
-          array('name' => 'symDifference', 'argument' => $geometry),
-          array('name' => 'union', 'argument' => $geometry),
-          array('name' => 'simplify', 'argument' => '0'),
-          array('name' => 'disjoint', 'argument' => $geometry),
-          array('name' => 'touches', 'argument' => $geometry),
-          array('name' => 'intersects', 'argument' => $geometry),
-          array('name' => 'crosses', 'argument' => $geometry),
-          array('name' => 'within', 'argument' => $geometry),
-          array('name' => 'contains', 'argument' => $geometry),
-          array('name' => 'overlaps', 'argument' => $geometry),
-          array('name' => 'covers', 'argument' => $geometry),
-          array('name' => 'coveredBy', 'argument' => $geometry),
-          array('name' => 'distance', 'argument' => $geometry),
-          array('name' => 'hausdorffDistance', 'argument' => $geometry),
-        );
+        $geosMethods = [
+          ['name' => 'geos'],
+          ['name' => 'setGeos', 'argument' => $geometry->geos()],
+          ['name' => 'pointOnSurface'],
+          ['name' => 'equals', 'argument' => $geometry],
+          ['name' => 'equalsExact', 'argument' => $geometry],
+          ['name' => 'relate', 'argument' => $geometry],
+          ['name' => 'checkValidity'],
+          ['name' => 'isSimple'],
+          ['name' => 'buffer', 'argument' => '10'],
+          ['name' => 'intersection', 'argument' => $geometry],
+          ['name' => 'convexHull'],
+          ['name' => 'difference', 'argument' => $geometry],
+          ['name' => 'symDifference', 'argument' => $geometry],
+          ['name' => 'union', 'argument' => $geometry],
+          ['name' => 'simplify', 'argument' => '0'],
+          ['name' => 'disjoint', 'argument' => $geometry],
+          ['name' => 'touches', 'argument' => $geometry],
+          ['name' => 'intersects', 'argument' => $geometry],
+          ['name' => 'crosses', 'argument' => $geometry],
+          ['name' => 'within', 'argument' => $geometry],
+          ['name' => 'contains', 'argument' => $geometry],
+          ['name' => 'overlaps', 'argument' => $geometry],
+          ['name' => 'covers', 'argument' => $geometry],
+          ['name' => 'coveredBy', 'argument' => $geometry],
+          ['name' => 'distance', 'argument' => $geometry],
+          ['name' => 'hausdorffDistance', 'argument' => $geometry],
+        ];
 
         foreach($geosMethods as $method) {
           $argument = NULL;

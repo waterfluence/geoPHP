@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace geoPHP\Tests\Adapter;
 
 use \geoPHP\Adapter\GeoHash;
 use PHPUnit\Framework\TestCase;
 
-class GeoHashTest extends TestCase
+final class GeoHashTest extends TestCase
 {
 
   /**
    * test cases for adjacent geohashes.
    */
-  function testAdjacent() {
+  function testAdjacent(): void {
     $this->assertEquals ( 'xne', GeoHash::adjacent ( 'xn7', 'top' ), 'Did not find correct top adjacent geohash for xn7' );
     $this->assertEquals ( 'xnk', GeoHash::adjacent ( 'xn7', 'right' ), 'Did not find correct right adjacent geohash for xn7' );
     $this->assertEquals ( 'xn5', GeoHash::adjacent ( 'xn7', 'bottom' ), 'Did not find correct bottom adjacent geohash for xn7' );

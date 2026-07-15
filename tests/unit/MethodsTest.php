@@ -1,49 +1,51 @@
 <?php
 
+declare(strict_types=1);
+
 namespace geoPHP\Tests;
 
 use \geoPHP\geoPHP;
 use PHPUnit\Framework\TestCase;
 
-class MethodsTest extends TestCase
+final class MethodsTest extends TestCase
 {
 
-  function testMethods()
+  function testMethods(): void
   {
     foreach (scandir('tests/input') as $file) {
       $parts = explode('.',$file);
-      if ($parts[0]) {
+      if ($parts[0] !== '' && $parts[0] !== '0') {
         $format = $parts[1];
         $value = file_get_contents('tests/input/'.$file);
         //echo "\nloading: " . $file . " for format: " . $format;
         $geometry = geoPHP::load($value, $format);
 
-        $methods = array(
-          array('name' => 'area'),
-          array('name' => 'boundary'),
-          array('name' => 'getBBox'),
-          array('name' => 'centroid'),
-          array('name' => 'length'),
-          array('name' => 'greatCircleLength'),
-          array('name' => 'haversineLength'),
-          array('name' => 'y'),
-          array('name' => 'x'),
-          array('name' => 'numGeometries'),
-          array('name' => 'geometryN', 'argument' => '1'),
-          array('name' => 'startPoint'),
-          array('name' => 'endPoint'),
-          array('name' => 'isRing'),
-          array('name' => 'isClosed'),
-          array('name' => 'numPoints'),
-          array('name' => 'pointN', 'argument' => '1'),
-          array('name' => 'exteriorRing'),
-          array('name' => 'numInteriorRings'),
-          array('name' => 'interiorRingN', 'argument' => '1'),
-          array('name' => 'dimension'),
-          array('name' => 'geometryType'),
-          array('name' => 'SRID'),
-          array('name' => 'setSRID', 'argument' => '4326'),
-        );
+        $methods = [
+          ['name' => 'area'],
+          ['name' => 'boundary'],
+          ['name' => 'getBBox'],
+          ['name' => 'centroid'],
+          ['name' => 'length'],
+          ['name' => 'greatCircleLength'],
+          ['name' => 'haversineLength'],
+          ['name' => 'y'],
+          ['name' => 'x'],
+          ['name' => 'numGeometries'],
+          ['name' => 'geometryN', 'argument' => '1'],
+          ['name' => 'startPoint'],
+          ['name' => 'endPoint'],
+          ['name' => 'isRing'],
+          ['name' => 'isClosed'],
+          ['name' => 'numPoints'],
+          ['name' => 'pointN', 'argument' => '1'],
+          ['name' => 'exteriorRing'],
+          ['name' => 'numInteriorRings'],
+          ['name' => 'interiorRingN', 'argument' => '1'],
+          ['name' => 'dimension'],
+          ['name' => 'geometryType'],
+          ['name' => 'SRID'],
+          ['name' => 'setSRID', 'argument' => '4326'],
+        ];
 
         foreach($methods as $method) {
           $argument = NULL;
@@ -66,7 +68,7 @@ class MethodsTest extends TestCase
    * @param array $argument
    * @param string $file
    */
-  function _methods_tester($geometry, $method_name, $argument, $file) {
+  function _methods_tester($geometry, $method_name, $argument, $file): void {
 
     if (!method_exists($geometry, $method_name)) {
       $this->fail("Method ".$method_name.'() doesn\'t exists.');
@@ -90,6 +92,8 @@ class MethodsTest extends TestCase
         }
         break;
       case 'geometryN':
+      case 'isClosed':
+      case 'numGeometries':
         if ($geometry->geometryType() == 'Point') {
           $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
         }
@@ -101,49 +105,8 @@ class MethodsTest extends TestCase
         }
         break;
       case 'startPoint':
-        if ($geometry->geometryType() == 'Point') {
-          $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'LineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'MultiLineString') {
-            $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        break;
       case 'endPoint':
-        if ($geometry->geometryType() == 'Point') {
-          $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'LineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'MultiLineString') {
-            $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        break;
       case 'isRing':
-        if ($geometry->geometryType() == 'Point') {
-          $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'LineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'MultiLineString') {
-          $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        break;
-      case 'isClosed':
-        if ($geometry->geometryType() == 'Point') {
-          $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'LineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'MultiLineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        break;
       case 'pointN':
         if ($geometry->geometryType() == 'Point') {
           $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
@@ -156,27 +119,7 @@ class MethodsTest extends TestCase
         }
         break;
       case 'exteriorRing':
-        if ($geometry->geometryType() == 'Point') {
-          $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'LineString') {
-          $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'MultiLineString') {
-          $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        break;
       case 'numInteriorRings':
-        if ($geometry->geometryType() == 'Point') {
-          $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'LineString') {
-          $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'MultiLineString') {
-          $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        break;
       case 'interiorRingN':
         if ($geometry->geometryType() == 'Point') {
           $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
@@ -204,6 +147,9 @@ class MethodsTest extends TestCase
         }
         break;
       case 'centroid':
+      case 'numPoints':
+      case 'dimension':
+      case 'boundary':
         if ($geometry->geometryType() == 'Point') {
           $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
         }
@@ -216,57 +162,13 @@ class MethodsTest extends TestCase
         break;
       case 'length':
         if ($geometry->geometryType() == 'Point') {
-          $this->assertEquals($geometry->$method_name($argument), 0, $failedOnMessage);
+          $this->assertEquals(0, $geometry->$method_name($argument), $failedOnMessage);
         }
         if ($geometry->geometryType() == 'LineString') {
-          $this->assertNotEquals($geometry->$method_name($argument), 0, $failedOnMessage);
+          $this->assertNotEquals(0, $geometry->$method_name($argument), $failedOnMessage);
         }
         if ($geometry->geometryType() == 'MultiLineString') {
-          $this->assertNotEquals($geometry->$method_name($argument), 0, $failedOnMessage);
-        }
-        break;
-      case 'numGeometries':
-        if ($geometry->geometryType() == 'Point') {
-          $this->assertNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'LineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'MultiLineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        break;
-      case 'numPoints':
-        if ($geometry->geometryType() == 'Point') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'LineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'MultiLineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        break;
-      case 'dimension':
-        if ($geometry->geometryType() == 'Point') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'LineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'MultiLineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        break;
-      case 'boundary':
-        if ($geometry->geometryType() == 'Point') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'LineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        }
-        if ($geometry->geometryType() == 'MultiLineString') {
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
+          $this->assertNotEquals(0, $geometry->$method_name($argument), $failedOnMessage);
         }
         break;
       case 'haversineLength':
@@ -274,11 +176,7 @@ class MethodsTest extends TestCase
         //TODO: Sometimes haversineLength() returns NAN, needs to check why.
         break;
       case 'greatCircleLength':
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        break;
       case 'area':
-          $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
-        break;
       case 'geometryType':
         $this->assertNotNull($geometry->$method_name($argument), $failedOnMessage);
         break;
@@ -295,11 +193,13 @@ class MethodsTest extends TestCase
    * @param \geoPHP\Geometry\Geometry $geometry
    * @throws \Exception
    */
-  function _methods_tester_with_geos($geometry) {
+  function _methods_tester_with_geos($geometry): void {
     // Cannot test methods if GEOS is not intstalled
-    if (!geoPHP::geosInstalled()) return;
+    if (!geoPHP::geosInstalled()) {
+        return;
+    }
 
-    $methods = array(
+    $methods = [
       //'boundary', //@@TODO: Uncomment this and fix errors
       'envelope',   //@@TODO: Testing reveales errors in this method -- POINT vs. POLYGON
       'getBBox',
@@ -310,7 +210,7 @@ class MethodsTest extends TestCase
       'isRing',
       'isClosed',
       'numPoints',
-    );
+    ];
 
     foreach ($methods as $method) {
       // Turn GEOS on
@@ -327,14 +227,14 @@ class MethodsTest extends TestCase
       $geos_type = gettype($geos_result);
       $norm_type = gettype($norm_result);
 
-      if ($geos_type != $norm_type) {
+      if ($geos_type !== $norm_type) {
         var_dump($geos_type, $norm_type);
         $this->fail('Type mismatch on '.$method);
         continue;
       }
 
       // Now check base on type
-      if ($geos_type == 'object') {
+      if ($geos_type === 'object') {
         $haus_dist = $geos_result->hausdorffDistance(geoPHP::load($norm_result->out('wkt'),'wkt'));
 
         // Get the length of the diagonal of the bbox - this is used to scale the haustorff distance
@@ -350,12 +250,10 @@ class MethodsTest extends TestCase
         }
       }
 
-      if ($geos_type == 'boolean' || $geos_type == 'string') {
-        if ($geos_result !== $norm_result) {
+      if (($geos_type === 'boolean' || $geos_type === 'string') && $geos_result !== $norm_result) {
           var_dump('GEOS : ', $geos_result->out('wkt'), 'NORM : ', $norm_result->out('wkt'));
           $this->fail('Output mismatch on '.$method);
           continue;
-        }
       }
 
       //@@TODO: Run tests for output of types arrays and float
