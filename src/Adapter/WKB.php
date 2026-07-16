@@ -164,6 +164,10 @@ class WKB implements GeoAdapter
     protected function getPoint(): ?\geoPHP\Geometry\Point
     {
         $coordinates = $this->reader->readDoubles($this->dimension * 8);
+        // An empty point is encoded as NaN coordinates (OGC); return an empty Point.
+        if (isset($coordinates[0], $coordinates[1]) && is_nan($coordinates[0]) && is_nan($coordinates[1])) {
+            return new Point();
+        }
         $point = null;
         switch (count($coordinates)) {
             case 2:
