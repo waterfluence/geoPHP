@@ -124,6 +124,36 @@ foreach ($result as $item) {
 }
 ```
 
+## Development
+
+### Running under a specific PHP version with Docker
+
+The `docker/` directory and `docker-compose.yml` are a convenience for
+contributors: they let you run this library (and its test suite) against a
+specific PHP version locally, so you can reproduce version-specific behaviour
+while you work. They are **not** used by CI — the test matrix runs on GitHub
+Actions with [`setup-php`](https://github.com/shivammathur/setup-php).
+
+Two services are provided, `php82` and `php83`, each mounting the repository at
+`/app` with Composer available.
+
+```bash
+# Build the images (first time only)
+docker compose build
+
+# Install dependencies inside a chosen version
+docker compose run --rm php83 composer install
+
+# Run the full test suite under PHP 8.3
+docker compose run --rm php83 composer tests
+
+# Same under PHP 8.2
+docker compose run --rm php82 composer tests
+
+# Or drop into a shell
+docker compose run --rm php83 bash
+```
+
 ## Documentation
 
 In progress… You can read the doc for original phayes/geoPHP at [geophp.net](https://geophp.net "GeoPHP homepage")
