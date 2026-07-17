@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace geoPHP\Tests;
 
 use \geoPHP\geoPHP;
 use PHPUnit\Framework\TestCase;
 
-class AdaptersTest extends TestCase
+final class AdaptersTest extends TestCase
 {
 
-  function testAdapters()
+  function testAdapters(): void
   {
     foreach (scandir('tests/input') as $file) {
       $parts = explode('.',$file);
-      if ($parts[0]) {
+      if ($parts[0] !== '' && $parts[0] !== '0') {
         $format = $parts[1];
         $input = file_get_contents('tests/input/'.$file);
         //echo "\nloading: " . $file . " for format: " . $format;
@@ -38,7 +40,9 @@ class AdaptersTest extends TestCase
 
         // Test to make sure adapter work the same wether GEOS is ON or OFF
         // Cannot test methods if GEOS is not intstalled
-        if (!geoPHP::geosInstalled()) return;
+        if (!geoPHP::geosInstalled()) {
+            return;
+        }
 
         foreach (geoPHP::getAdapterMap() as $adapter_key => $adapter_class) {
           if ($adapter_key != 'google_geocode') {

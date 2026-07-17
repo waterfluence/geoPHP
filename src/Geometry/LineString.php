@@ -15,8 +15,7 @@ use geoPHP\geoPHP;
  */
 class LineString extends Curve
 {
-
-    public function geometryType()
+    public function geometryType(): string
     {
         return Geometry::LINE_STRING;
     }
@@ -33,7 +32,7 @@ class LineString extends Curve
         parent::__construct($points);
     }
 
-    public static function fromArray($array)
+    public static function fromArray($array): static
     {
         $points = [];
         foreach ($array as $point) {
@@ -44,10 +43,8 @@ class LineString extends Curve
 
     /**
      * Returns the number of points of the LineString
-     *
-     * @return int
      */
-    public function numPoints()
+    public function numPoints(): int
     {
         return count($this->components);
     }
@@ -93,8 +90,8 @@ class LineString extends Curve
             if ($previousPoint) {
                 // Equivalent to $previousPoint->distance($point) but much faster
                 $segmentLength = sqrt(
-                    pow(($previousPoint->x() - $point->x()), 2) +
-                        pow(($previousPoint->y() - $point->y()), 2)
+                    ($previousPoint->x() - $point->x()) ** 2 +
+                        ($previousPoint->y() - $point->y()) ** 2
                 );
                 $length += $segmentLength;
                 $x += ($previousPoint->x() + $point->x()) / 2 * $segmentLength;
@@ -111,9 +108,8 @@ class LineString extends Curve
     /**
      *  Returns the length of this Curve in its associated spatial reference.
      * Eg. if Geometry is in geographical coordinate system it returns the length in degrees
-     * @return float|int
      */
-    public function length()
+    public function length(): float
     {
         if ($this->getGeos()) {
             // @codeCoverageIgnoreStart
@@ -127,8 +123,8 @@ class LineString extends Curve
         foreach ($this->getPoints() as $point) {
             if ($previousPoint) {
                 $length += sqrt(
-                    pow(($previousPoint->x() - $point->x()), 2) +
-                        pow(($previousPoint->y() - $point->y()), 2)
+                    ($previousPoint->x() - $point->x()) ** 2 +
+                        ($previousPoint->y() - $point->y()) ** 2
                 );
             }
             $previousPoint = $point;
@@ -136,7 +132,7 @@ class LineString extends Curve
         return $length;
     }
 
-    public function length3D()
+    public function length3D(): float
     {
         $length = 0.0;
         /** @var Point $previousPoint */
@@ -144,9 +140,9 @@ class LineString extends Curve
         foreach ($this->getPoints() as $point) {
             if ($previousPoint) {
                 $length += sqrt(
-                    pow(($previousPoint->x() - $point->x()), 2) +
-                        pow(($previousPoint->y() - $point->y()), 2) +
-                        pow(($previousPoint->z() - $point->z()), 2)
+                    ($previousPoint->x() - $point->x()) ** 2 +
+                        ($previousPoint->y() - $point->y()) ** 2 +
+                        ($previousPoint->z() - $point->z()) ** 2
                 );
             }
             $previousPoint = $point;
@@ -158,7 +154,7 @@ class LineString extends Curve
      * @param float|null $radius Earth radius
      * @return float Length in meters
      */
-    public function greatCircleLength($radius = geoPHP::EARTH_WGS84_SEMI_MAJOR_AXIS)
+    public function greatCircleLength($radius = geoPHP::EARTH_WGS84_SEMI_MAJOR_AXIS): float
     {
         $length = 0.0;
         $rad = M_PI / 180;
@@ -175,16 +171,16 @@ class LineString extends Curve
                     $radius *
                     atan2(
                         sqrt(
-                            pow(cos($lat2) * sin($deltaLon), 2) +
-                                    pow(cos($lat1) * sin($lat2) - sin($lat1) * cos($lat2) * cos($deltaLon), 2)
+                            (cos($lat2) * sin($deltaLon)) ** 2 +
+                                    (cos($lat1) * sin($lat2) - sin($lat1) * cos($lat2) * cos($deltaLon)) ** 2
                         ),
                         sin($lat1) * sin($lat2) +
                             cos($lat1) * cos($lat2) * cos($deltaLon)
                     );
             if ($points[$i]->is3D()) {
                 $d = sqrt(
-                    pow($d, 2) +
-                        pow($points[$i + 1]->z() - $points[$i]->z(), 2)
+                    $d ** 2 +
+                        ($points[$i + 1]->z() - $points[$i]->z()) ** 2
                 );
             }
 
@@ -197,7 +193,7 @@ class LineString extends Curve
     /**
      * @return float Haversine length of geometry in degrees
      */
-    public function haversineLength()
+    public function haversineLength(): float
     {
         $distance = 0.0;
         $points = $this->getPoints();
@@ -227,7 +223,7 @@ class LineString extends Curve
      *
      * @return float Length in meters
      */
-    public function vincentyLength()
+    public function vincentyLength(): ?float
     {
         $length = 0.0;
         $rad = M_PI / 180;
@@ -269,7 +265,7 @@ class LineString extends Curve
                 $sinAlpha = $cosU1 * $cosU2 * $sinLambda / $sinSigma;
                 $cosSqAlpha = 1 - $sinAlpha * $sinAlpha;
                 $cos2SigmaM = 0;
-                if ($cosSqAlpha <> 0) {
+                if ($cosSqAlpha != 0) {
                     $cos2SigmaM = $cosSigma - 2 * $sinU1 * $sinU2 / $cosSqAlpha;
                 }
                 $C = $f / 16 * $cosSqAlpha * (4 + $f * (4 - 3 * $cosSqAlpha));
@@ -277,7 +273,7 @@ class LineString extends Curve
                 $lambda = $L + (1 - $C) * $f * $sinAlpha *
                     ($sigma + $C * $sinSigma * ($cos2SigmaM + $C * $cosSigma * (- 1 + 2 * $cos2SigmaM * $cos2SigmaM)));
             } while (abs($lambda - $lambdaP) > 1e-12 && --$iterationLimit > 0);
-            if ($iterationLimit == 0) {
+            if ($iterationLimit === 0) {
                 return null; // not converging
             }
             $uSq        = $cosSqAlpha * ($a * $a - $b * $b) / ($b * $b);
@@ -317,13 +313,12 @@ class LineString extends Curve
         return $max > ~PHP_INT_MAX ? $max : null;
     }
 
-    public function zDifference()
+    public function zDifference(): ?float
     {
         if ($this->startPoint()->hasZ() && $this->endPoint()->hasZ()) {
             return abs($this->startPoint()->z() - $this->endPoint()->z());
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -332,10 +327,8 @@ class LineString extends Curve
      * @param int|float|null $verticalTolerance Smoothing factor filtering noisy elevation data.
      *      Its unit equals to the z-coordinates unit (meters for geographical coordinates)
      *      If the elevation data comes from a DEM, a value around 3.5 can be acceptable.
-     *
-     * @return float
      */
-    public function elevationGain($verticalTolerance = 0)
+    public function elevationGain($verticalTolerance = 0): float
     {
         $gain = 0.0;
         $lastEle = $this->startPoint()->z();
@@ -357,10 +350,8 @@ class LineString extends Curve
      * @param int|float|null $verticalTolerance Smoothing factor filtering noisy elevation data.
      *      Its unit equals to the z-coordinates unit (meters for geographical coordinates)
      *      If the elevation data comes from a DEM, a value around 3.5 can be acceptable.
-     *
-     * @return float
      */
-    public function elevationLoss($verticalTolerance = 0)
+    public function elevationLoss($verticalTolerance = 0): float
     {
         $loss = 0.0;
         $lastEle = $this->startPoint()->z();
@@ -403,9 +394,9 @@ class LineString extends Curve
      * Get all line segments
      * @param bool $toArray return segments as LineString or array of start and end points
      *
-     * @return LineString[]|array[Point]
+     * @return mixed[]
      */
-    public function explode($toArray = false)
+    public function explode($toArray = false): array
     {
         $points = $this->getPoints();
         $numPoints = count($points);
@@ -446,10 +437,8 @@ class LineString extends Curve
         $segments = $this->explode(true);
         foreach ($segments as $i => $segment) {
             foreach ($segments as $j => $checkSegment) {
-                if ($i != $j) {
-                    if (Geometry::segmentIntersects($segment[0], $segment[1], $checkSegment[0], $checkSegment[1])) {
-                        return false;
-                    }
+                if ($i != $j && Geometry::segmentIntersects($segment[0], $segment[1], $checkSegment[0], $checkSegment[1])) {
+                    return false;
                 }
             }
         }
@@ -513,9 +502,8 @@ class LineString extends Curve
                 }
             }
             return $distance;
-        } else {
-            // It can be treated as collection
-            return parent::distance($geometry);
         }
+        // It can be treated as collection
+        return parent::distance($geometry);
     }
 }

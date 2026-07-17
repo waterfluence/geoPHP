@@ -14,18 +14,17 @@ use geoPHP\Exception\InvalidGeometryException;
  */
 abstract class Curve extends Collection
 {
-
     public function __construct($components = [], $allowEmptyComponents = false, $allowedComponentType = Point::class)
     {
-        if (is_array($components) && count($components) == 1) {
+        if (is_array($components) && count($components) === 1) {
             throw new InvalidGeometryException("Cannot construct a " . static::class . " with a single point");
         }
         parent::__construct($components, $allowEmptyComponents, $allowedComponentType);
     }
 
-    protected $startPoint = null;
+    protected $startPoint;
 
-    protected $endPoint = null;
+    protected $endPoint;
 
     public function geometryType()
     {
@@ -39,7 +38,7 @@ abstract class Curve extends Collection
 
     public function startPoint()
     {
-        if (!isset($this->startPoint)) {
+        if ($this->startPoint === null) {
             $this->startPoint = $this->pointN(1);
         }
         return $this->startPoint;
@@ -47,7 +46,7 @@ abstract class Curve extends Collection
 
     public function endPoint()
     {
-        if (!isset($this->endPoint)) {
+        if ($this->endPoint === null) {
             $this->endPoint = $this->pointN($this->numPoints());
         }
         return $this->endPoint;
@@ -55,7 +54,7 @@ abstract class Curve extends Collection
 
     public function isClosed()
     {
-        return ($this->startPoint() && $this->endPoint() ? $this->startPoint()->equals($this->endPoint()) : false);
+        return ($this->startPoint() && $this->endPoint() && $this->startPoint()->equals($this->endPoint()));
     }
 
     public function isRing()

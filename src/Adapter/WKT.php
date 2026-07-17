@@ -18,7 +18,6 @@ use geoPHP\Geometry\MultiPolygon;
  */
 class WKT implements GeoAdapter
 {
-
     protected $hasZ      = false;
 
     protected $measured  = false;
@@ -32,7 +31,7 @@ class WKT implements GeoAdapter
     public static function isWktType($typeString)
     {
         foreach (geoPHP::getGeometryList() as $geom => $type) {
-            if (strtolower((substr($typeString, 0, strlen($geom)))) == $geom) {
+            if (strtolower((substr($typeString, 0, strlen((string) $geom)))) == $geom) {
                 return $type;
             }
         }
@@ -69,7 +68,7 @@ class WKT implements GeoAdapter
                     $geom->setSRID($srid);
                 }
                 return $geom;
-            } catch (\Exception $e) {
+            } catch (\Exception) {
 //                if ($e->getMessage() !== 'IllegalArgumentException: Empty Points cannot be represented in WKB') {
 //                    throw $e;
 //                } // else try with GeoPHP' parser
@@ -86,16 +85,15 @@ class WKT implements GeoAdapter
     }
 
     /**
-     * @param string $wkt
      *
      * @return Geometry|null
      * @throws \Exception
      */
-    private function parseTypeAndGetData($wkt)
+    private function parseTypeAndGetData(string $wkt): mixed
     {
         // geometry type is the first word
         if (preg_match('/^(?<type>[A-Z]+)\s*(?<z>Z*)(?<m>M*)\s*(?:\((?<data>.+)\)|(?<data_empty>EMPTY))$/', $wkt, $m)) {
-            $geometryType = $this->isWktType($m['type']);
+            $geometryType = static::isWktType($m['type']);
             // Not used yet
             //$this->hasZ   = $this->hasZ || $m['z'];
             //$this->measured = $this->measured || $m['m'];
@@ -110,11 +108,11 @@ class WKT implements GeoAdapter
         throw new \Exception('Cannot parse WKT');
     }
 
-    private function parsePoint($dataString)
+    private function parsePoint(string $dataString): \geoPHP\Geometry\Point
     {
         $dataString = trim($dataString);
         // If it's marked as empty, then return an empty point
-        if ($dataString == 'EMPTY') {
+        if ($dataString === 'EMPTY') {
             return new Point();
         }
         $z = $m = null;
@@ -132,10 +130,10 @@ class WKT implements GeoAdapter
         return new Point($parts[0], $parts[1], $z, $m);
     }
 
-    private function parseLineString($dataString)
+    private function parseLineString(string $dataString): \geoPHP\Geometry\LineString
     {
         // If it's marked as empty, then return an empty line
-        if ($dataString == 'EMPTY') {
+        if ($dataString === 'EMPTY') {
             return new LineString();
         }
 
@@ -146,10 +144,10 @@ class WKT implements GeoAdapter
         return new LineString($points);
     }
 
-    private function parsePolygon($dataString)
+    private function parsePolygon(string $dataString): \geoPHP\Geometry\Polygon
     {
         // If it's marked as empty, then return an empty polygon
-        if ($dataString == 'EMPTY') {
+        if ($dataString === 'EMPTY') {
             return new Polygon();
         }
 
@@ -164,10 +162,8 @@ class WKT implements GeoAdapter
 
     /** @noinspection PhpUnusedPrivateMethodInspection
      * @param string $dataString
-     *
-     * @return MultiPoint
      */
-    private function parseMultiPoint($dataString)
+    private function parseMultiPoint($dataString): \geoPHP\Geometry\MultiPoint
     {
         // If it's marked as empty, then return an empty MultiPoint
         if ($dataString == 'EMPTY') {
@@ -187,10 +183,8 @@ class WKT implements GeoAdapter
 
     /** @noinspection PhpUnusedPrivateMethodInspection
      * @param string $dataString
-     *
-     * @return MultiLineString
      */
-    private function parseMultiLineString($dataString)
+    private function parseMultiLineString($dataString): \geoPHP\Geometry\MultiLineString
     {
         // If it's marked as empty, then return an empty multi-linestring
         if ($dataString == 'EMPTY') {
@@ -207,10 +201,8 @@ class WKT implements GeoAdapter
 
     /** @noinspection PhpUnusedPrivateMethodInspection
      * @param string $dataString
-     *
-     * @return MultiPolygon
      */
-    private function parseMultiPolygon($dataString)
+    private function parseMultiPolygon($dataString): \geoPHP\Geometry\MultiPolygon
     {
         // If it's marked as empty, then return an empty multi-polygon
         if ($dataString == 'EMPTY') {
@@ -228,10 +220,8 @@ class WKT implements GeoAdapter
 
     /** @noinspection PhpUnusedPrivateMethodInspection
      * @param string $dataString
-     *
-     * @return GeometryCollection
      */
-    private function parseGeometryCollection($dataString)
+    private function parseGeometryCollection($dataString): \geoPHP\Geometry\GeometryCollection
     {
         // If it's marked as empty, then return an empty geom-collection
         if ($dataString == 'EMPTY') {
@@ -239,7 +229,7 @@ class WKT implements GeoAdapter
         }
 
         $geometries = [];
-        while (strlen($dataString) > 0) {
+        while ((string) $dataString !== '') {
             // Matches the first balanced parenthesis group (or term EMPTY)
             preg_match(
                 '/\((?>[^()]+|(?R))*\)|EMPTY/',
@@ -264,11 +254,10 @@ class WKT implements GeoAdapter
     /**
      * Serialize geometries into a WKT string.
      *
-     * @param Geometry $geometry
      *
      * @return string The WKT string representation of the input geometries
      */
-    public function write(Geometry $geometry)
+    public function write(Geometry $geometry): string
     {
         // If geos is installed, then we take a shortcut and let it write the WKT
         if (geoPHP::geosInstalled()) {
@@ -287,8 +276,9 @@ class WKT implements GeoAdapter
         if ($geometry->isEmpty()) {
             return strtoupper($geometry->geometryType()) . ' EMPTY';
         }
+        $data = $this->extractData($geometry);
 
-        if ($data = $this->extractData($geometry)) {
+        if ($data !== '' && $data !== '0') {
             $extension = '';
             if ($this->hasZ) {
                 $extension .= 'Z';
@@ -296,7 +286,7 @@ class WKT implements GeoAdapter
             if ($this->measured) {
                 $extension .= 'M';
             }
-            return strtoupper($geometry->geometryType()) . ($extension ? ' ' . $extension : '') . ' (' . $data . ')';
+            return strtoupper($geometry->geometryType()) . ($extension !== '' && $extension !== '0' ? ' ' . $extension : '') . ' (' . $data . ')';
         }
         return '';
     }
@@ -305,10 +295,8 @@ class WKT implements GeoAdapter
      * Extract geometry to a WKT string
      *
      * @param Geometry|Collection $geometry A Geometry object
-     *
-     * @return string
      */
-    public function extractData($geometry)
+    public function extractData($geometry): string
     {
         $parts = [];
         switch ($geometry->geometryType()) {
@@ -333,11 +321,7 @@ class WKT implements GeoAdapter
             case Geometry::MULTI_LINE_STRING:
             case Geometry::MULTI_POLYGON:
                 foreach ($geometry->getComponents() as $component) {
-                    if ($component->isEmpty()) {
-                        $parts[] = 'EMPTY';
-                    } else {
-                        $parts[] = '(' . $this->extractData($component) . ')';
-                    }
+                    $parts[] = $component->isEmpty() ? 'EMPTY' : '(' . $this->extractData($component) . ')';
                 }
                 return implode(', ', $parts);
             case Geometry::GEOMETRY_COLLECTION:
@@ -354,8 +338,8 @@ class WKT implements GeoAdapter
                     }
                     $data = $this->extractData($component);
                     $parts[] = strtoupper($component->geometryType())
-                            . ($extension ? ' ' . $extension : '')
-                            . ($data ? ' (' . $data . ')' : ' EMPTY');
+                            . ($extension !== '' && $extension !== '0' ? ' ' . $extension : '')
+                            . ($data !== '' && $data !== '0' ? ' (' . $data . ')' : ' EMPTY');
                 }
                 return implode(', ', $parts);
         }

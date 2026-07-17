@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace geoPHP\Geometry;
 
 use geoPHP\geoPHP;
@@ -11,12 +13,6 @@ use geoPHP\geoPHP;
  */
 abstract class MultiGeometry extends Collection
 {
-
-    public function __construct($components = [], $allowEmptyComponents = true, $allowedComponentType = Geometry::class)
-    {
-        parent::__construct($components, $allowEmptyComponents, $allowedComponentType);
-    }
-
     /**
      * @return bool|null
      */
@@ -152,9 +148,8 @@ abstract class MultiGeometry extends Collection
         $endPoint = $this->endPoint();
         if ($startPoint && $endPoint && $startPoint->hasZ() && $endPoint->hasZ()) {
             return abs($startPoint->z() - $endPoint->z());
-        } else {
-            return null;
         }
+        return null;
     }
 
     public function elevationGain($verticalTolerance = 0)

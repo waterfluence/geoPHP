@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * This file contains the CollectionTest class.
  * For more information see the class description below.
@@ -6,7 +9,6 @@
  * @author Peter Bathory <peter.bathory@cartographia.hu>
  * @since 2020-03-19
  */
-
 namespace geoPHP\Tests\Geometry;
 
 use \geoPHP\Geometry\Collection;
@@ -17,84 +19,72 @@ use \PHPUnit\Framework\TestCase;
 /**
  * This class... TODO: Complete this
  */
-class CollectionTest extends TestCase
+final class CollectionTest extends TestCase
 {
 
-    public function providerIs3D()
+    public static function providerIs3D(): \Iterator
     {
-        return [
-                [[new Point(1, 2)], false],
-                [[new Point(1, 2, 3)], true],
-                [[new Point(1, 2, 3), new Point(1, 2)], true],
-        ];
+        yield [[new Point(1, 2)], false];
+        yield [[new Point(1, 2, 3)], true];
+        yield [[new Point(1, 2, 3), new Point(1, 2)], true];
     }
 
     /**
-     * @dataProvider providerIs3D
-     *
      * @param Point[] $components
-     * @param bool    $result
      */
-    public function testIs3D($components, $result)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIs3D')]
+    public function testIs3D(array $components, bool $result): void
     {
         /** @var Collection $stub */
-        $stub = $this->getMockForAbstractClass(Collection::class, [$components, true]);
+        $stub = new CollectionStub($components, true);
 
         $this->assertEquals($stub->is3D(), $result);
     }
 
-    public function providerIsMeasured()
+    public static function providerIsMeasured(): \Iterator
     {
-        return [
-                [[new Point()], false],
-                [[new Point(1, 2)], false],
-                [[new Point(1, 2, 3)], false],
-                [[new Point(1, 2, 3, 4)], true],
-                [[new Point(1, 2, 3, 4), new Point(1, 2)], true],
-        ];
+        yield [[new Point()], false];
+        yield [[new Point(1, 2)], false];
+        yield [[new Point(1, 2, 3)], false];
+        yield [[new Point(1, 2, 3, 4)], true];
+        yield [[new Point(1, 2, 3, 4), new Point(1, 2)], true];
     }
 
     /**
-     * @dataProvider providerIsMeasured
-     *
      * @param Point[] $components
-     * @param bool    $result
      */
-    public function testIsMeasured($components, $result)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIsMeasured')]
+    public function testIsMeasured(array $components, bool $result): void
     {
         /** @var Collection $stub */
-        $stub = $this->getMockForAbstractClass(Collection::class, [$components, true]);
+        $stub = new CollectionStub($components, true);
 
         $this->assertEquals($stub->isMeasured(), $result);
     }
 
-    public function providerIsEmpty()
+    public static function providerIsEmpty(): \Iterator
     {
-        return [
-                [[], true],
-                [[new Point()], true],
-                [[new Point(1, 2)], false],
-        ];
+        yield [[], true];
+        yield [[new Point()], true];
+        yield [[new Point(1, 2)], false];
     }
 
     /**
-     * @dataProvider providerIsEmpty
-     *
      * @param Point[] $components
-     * @param bool    $result
      */
-    public function testIsEmpty($components, $result)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIsEmpty')]
+    public function testIsEmpty(array $components, bool $result): void
     {
         /** @var Collection $stub */
-        $stub = $this->getMockForAbstractClass(Collection::class, [$components, true]);
+        $stub = new CollectionStub($components, true);
 
         $this->assertEquals($stub->isEmpty(), $result);
     }
 
-    public function testNonApplicableMethods()
+    public function testNonApplicableMethods(): void
     {
         /** @var Collection $stub */
-        $stub = $this->getMockForAbstractClass(Collection::class, [[], true]);
+        $stub = new CollectionStub([], true);
 
         $this->assertNull($stub->x());
         $this->assertNull($stub->y());
@@ -102,7 +92,7 @@ class CollectionTest extends TestCase
         $this->assertNull($stub->m());
     }
 
-    public function testAsArray()
+    public function testAsArray(): void
     {
         $components = [
                 new Point(1, 2),
@@ -114,12 +104,12 @@ class CollectionTest extends TestCase
         ];
 
         /** @var Collection $stub */
-        $stub = $this->getMockForAbstractClass(Collection::class, [$components, true]);
+        $stub = new CollectionStub($components, true);
 
         $this->assertEquals($stub->asArray(), $expected);
     }
 
-    public function testFlatten()
+    public function testFlatten(): void
     {
         $components = [
                 new Point(1, 2, 3, 4),
@@ -128,7 +118,7 @@ class CollectionTest extends TestCase
         ];
 
         /** @var Collection $stub */
-        $stub = $this->getMockForAbstractClass(Collection::class, [$components]);
+        $stub = new CollectionStub($components);
         $stub->flatten();
 
         $this->assertFalse($stub->hasZ());
@@ -136,7 +126,7 @@ class CollectionTest extends TestCase
         $this->assertFalse($stub->getPoints()[0]->hasZ());
     }
 
-    public function testExplode()
+    public function testExplode(): void
     {
         $points = [new Point(1, 2), new Point(3, 4), new Point(5, 6), new Point(1, 2)];
         $components = [
@@ -144,7 +134,7 @@ class CollectionTest extends TestCase
         ];
 
         /** @var Collection $stub */
-        $stub = $this->getMockForAbstractClass(Collection::class, [$components]);
+        $stub = new CollectionStub($components);
 
         $segments = $stub->explode();
         $this->assertCount(count($points) - 1, $segments);

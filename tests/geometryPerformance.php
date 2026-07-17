@@ -10,7 +10,7 @@
  * Feel free to add more test methods.
  */
 
-require '../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use geoPHP\Geometry\Point;
 use geoPHP\Geometry\LineString;
@@ -18,11 +18,11 @@ use geoPHP\Geometry\Polygon;
 use geoPHP\Geometry\GeometryCollection;
 use geoPHP\geoPHP;
 
-function testStart($message) {
+function testStart($message): void {
     $GLOBALS['runTime'] = microtime(true);
     echo $message . "\n";
 }
-function testEnd($result=null, $ready=false) {
+function testEnd($result=null, $ready=false): void {
     if ($ready) {
         echo "\nTotal run time: " . round(microtime(true) - $GLOBALS['startTime'], 4) . ' sec,';
     } else {

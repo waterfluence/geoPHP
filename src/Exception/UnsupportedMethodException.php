@@ -7,7 +7,6 @@ namespace geoPHP\Exception;
  */
 class UnsupportedMethodException extends \Exception
 {
-
     /**
      * Public constructor.
      *
@@ -25,9 +24,8 @@ class UnsupportedMethodException extends \Exception
      * Method is supported only with GEOS installed
      *
      * @param string $methodName Name of the unsupported method
-     * @return UnsupportedMethodException
      */
-    public static function geos($methodName)
+    public static function geos($methodName): self
     {
         return new self($methodName, 0, 'Please install GEOS extension.');
     }

@@ -12,13 +12,12 @@ use geoPHP\geoPHP;
  */
 class MultiPolygon extends MultiSurface
 {
-
     public function __construct($components = [])
     {
         parent::__construct($components, true, Polygon::class);
     }
 
-    public function geometryType()
+    public function geometryType(): string
     {
         return Geometry::MULTI_POLYGON;
     }
@@ -52,7 +51,7 @@ class MultiPolygon extends MultiSurface
         return new Point($x / $totalArea, $y / $totalArea);
     }
 
-    public function area()
+    public function area(): float|int
     {
         if ($this->getGeos()) {
             // @codeCoverageIgnoreStart
@@ -68,7 +67,7 @@ class MultiPolygon extends MultiSurface
         return $area;
     }
 
-    public function boundary()
+    public function boundary(): \geoPHP\Geometry\MultiLineString
     {
         $rings = [];
         foreach ($this->getComponents() as $component) {

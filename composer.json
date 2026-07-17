@@ -29,14 +29,14 @@
     }
   },
   "require": {
-    "php": "5.5 - 8.2"
+    "php": ">=8.2"
   },
   "require-dev": {
-    "php": "5.5 - 8.3",
-    "phpunit/phpunit": "5.* || 8.*",
-    "php-coveralls/php-coveralls": "2.*",
-    "squizlabs/php_codesniffer": "3.*",
-    "phpstan/phpstan": "^0.12.18"
+    "phpunit/phpunit": "^11",
+    "php-coveralls/php-coveralls": "^2.7",
+    "squizlabs/php_codesniffer": "^3.11",
+    "phpstan/phpstan": "^2.0",
+    "rector/rector": "^2.0"
   },
   "suggest": {
     "ext-geos": "GEOS allows more advanced operations"
@@ -60,7 +60,7 @@
     "cs": "vendor/bin/phpcs --cache -n -p src/",
     "cs-warning": "vendor/bin/phpcs --cache -p -w src/ || true",
     "cs-fix": "vendor/bin/phpcbf --cache -n -p src/",
-    "stan" : "vendor/bin/phpstan analyze",
+    "stan" : "vendor/bin/phpstan analyze --memory-limit=1G",
     "unit": "GEOS_DISABLED=1 vendor/bin/phpunit --color=always --coverage-html build/coverage/",
     "unit-clover": "GEOS_DISABLED=1 vendor/bin/phpunit --color=always --coverage-clover build/logs/clover.xml",
     "test-input": "cd tests && php test.php && cd ..",

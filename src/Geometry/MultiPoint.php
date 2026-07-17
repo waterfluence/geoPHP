@@ -16,16 +16,12 @@ use geoPHP\geoPHP;
  */
 class MultiPoint extends MultiGeometry
 {
-
     public function __construct($components = [])
     {
         parent::__construct($components, true, Point::class);
     }
 
-    /**
-     * @return string
-     */
-    public function geometryType()
+    public function geometryType(): string
     {
         return Geometry::MULTI_POINT;
     }
@@ -34,12 +30,12 @@ class MultiPoint extends MultiGeometry
      * MultiPoint is 0-dimensional
      * @return int 0
      */
-    public function dimension()
+    public function dimension(): int
     {
         return 0;
     }
 
-    public static function fromArray($array)
+    public static function fromArray($array): static
     {
         $points = [];
         foreach ($array as $point) {
@@ -51,10 +47,8 @@ class MultiPoint extends MultiGeometry
     /**
      * A MultiPoint is simple if no two Points in the MultiPoint are equal
      * (have identical coordinate values in X and Y).
-     *
-     * @return bool
      */
-    public function isSimple()
+    public function isSimple(): bool
     {
         $componentCount = count($this->components);
         for ($i = 0; $i < $componentCount; $i++) {
@@ -69,9 +63,8 @@ class MultiPoint extends MultiGeometry
 
     /**
      * The boundary of a MultiPoint is the empty set.
-     * @return GeometryCollection
      */
-    public function boundary()
+    public function boundary(): \geoPHP\Geometry\GeometryCollection
     {
         return new GeometryCollection();
     }
@@ -105,7 +98,7 @@ class MultiPoint extends MultiGeometry
 
     // Not valid for this geometry type
     // --------------------------------
-    public function explode($toArray = false)
+    public function explode($toArray = false): null
     {
         return null;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace geoPHP\Adapter;
 
 use geoPHP\Geometry\Geometry;
@@ -19,7 +21,6 @@ use geoPHP\Geometry\Geometry;
  */
 interface GeoAdapter
 {
-
     /**
      * Read input and return a Geometry
      *
@@ -31,7 +32,6 @@ interface GeoAdapter
     /**
      * Write out a Geometry in the adapter's format
      *
-     * @param Geometry $geometry
      * @return string
      */
     public function write(Geometry $geometry);

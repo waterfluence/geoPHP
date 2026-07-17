@@ -61,7 +61,7 @@ class OSM implements GeoAdapter
         try {
             $geom = $this->geomFromXML();
         } catch (\Exception $e) {
-            throw new \Exception("Cannot read geometries from OSM XML: " . $e->getMessage());
+            throw new \Exception("Cannot read geometries from OSM XML: " . $e->getMessage(), $e->getCode(), $e);
         }
 
         return $geom;
@@ -81,7 +81,13 @@ class OSM implements GeoAdapter
             $tags = [];
             foreach ($node->getElementsByTagName('tag') as $tag) {
                 $key = $tag->attributes->getNamedItem('k')->nodeValue;
-                if ($key === 'source' || $key === 'fixme' || $key === 'created_by') {
+                if ($key === 'source') {
+                    continue;
+                }
+                if ($key === 'fixme') {
+                    continue;
+                }
+                if ($key === 'created_by') {
                     continue;
                 }
                 $tags[$key] = $tag->attributes->getNamedItem('v')->nodeValue;
@@ -92,7 +98,7 @@ class OSM implements GeoAdapter
                     'tags' => $tags
             ];
         }
-        if (empty($nodes)) {
+        if ($nodes === []) {
             return new GeometryCollection();
         }
 
@@ -112,7 +118,13 @@ class OSM implements GeoAdapter
             $tags = [];
             foreach ($way->getElementsByTagName('tag') as $tag) {
                 $key = $tag->attributes->getNamedItem('k')->nodeValue;
-                if ($key === 'source' || $key === 'fixme' || $key === 'created_by') {
+                if ($key === 'source') {
+                    continue;
+                }
+                if ($key === 'fixme') {
+                    continue;
+                }
+                if ($key === 'created_by') {
                     continue;
                 }
                 $tags[$key] = $tag->attributes->getNamedItem('v')->nodeValue;
@@ -163,7 +175,7 @@ class OSM implements GeoAdapter
                     $relationWays[$ref] = $ways[$ref]['nodes'];
                 }
             }
-            
+
             if (in_array($relationType, $polygonalTypes)) {
                 $relationPolygons = $this->processMultipolygon($relationWays, $nodes);
             }
@@ -174,24 +186,24 @@ class OSM implements GeoAdapter
             // Assemble relation geometries
             $geometryCollection = [];
             if (!empty($relationPolygons)) {
-                $geometryCollection[] = count($relationPolygons) == 1 ? $relationPolygons[0] : new MultiPolygon($relationPolygons);
+                $geometryCollection[] = count($relationPolygons) === 1 ? $relationPolygons[0] : new MultiPolygon($relationPolygons);
             }
             if (!empty($relationLines)) {
-                $geometryCollection[] = count($relationLines) == 1 ? $relationLines[0] : new MultiLineString($relationLines);
+                $geometryCollection[] = count($relationLines) === 1 ? $relationLines[0] : new MultiLineString($relationLines);
             }
-            if (!empty($relationPoints)) {
-                $geometryCollection[] = count($relationPoints) == 1 ? $relationPoints[0] : new MultiPoint($relationPoints);
+            if ($relationPoints !== []) {
+                $geometryCollection[] = count($relationPoints) === 1 ? $relationPoints[0] : new MultiPoint($relationPoints);
             }
 
-            if (!empty($geometryCollection)) {
-                $geometries[] = count($geometryCollection) == 1 ? $geometryCollection[0] : new GeometryCollection($geometryCollection);
+            if ($geometryCollection !== []) {
+                $geometries[] = count($geometryCollection) === 1 ? $geometryCollection[0] : new GeometryCollection($geometryCollection);
             }
         }
 
         // Process ways
         foreach ($ways as $way) {
             if (
-                (!$way['assigned'] || !empty($way['tags']))
+                (!$way['assigned'] || isset($way['tags']) && $way['tags'] !== [])
                 && !isset($way['tags']['boundary'])
                 && (!isset($way['tags']['natural'])  || $way['tags']['natural'] !== 'mountain_range')
             ) {
@@ -202,11 +214,7 @@ class OSM implements GeoAdapter
                 $line = new LineString($linePoints);
                 if ($way['isRing']) {
                     $polygon = new Polygon([$line]);
-                    if ($polygon->isSimple()) {
-                        $geometries[] = $polygon;
-                    } else {
-                        $geometries[] = $line;
-                    }
+                    $geometries[] = $polygon->isSimple() ? $polygon : $line;
                 } else {
                     $geometries[] = $line;
                 }
@@ -220,12 +228,12 @@ class OSM implements GeoAdapter
         }
 
         //var_dump($geometries);
-        return count($geometries) == 1 ? $geometries[0] : new GeometryCollection($geometries);
+        return count($geometries) === 1 ? $geometries[0] : new GeometryCollection($geometries);
     }
-    
-    protected function processRoutes(&$relationWays, &$nodes)
+
+    protected function processRoutes(array &$relationWays, array &$nodes)
     {
-    
+
         // Construct lines
         /** @var LineString[] $lineStrings */
         $lineStrings = [];
@@ -260,7 +268,7 @@ class OSM implements GeoAdapter
                 // If line members are not ordered, we need to repeat end matching some times
                 } while ($waysAdded > 0);
             }
-            
+
             // Create the new LineString
             $linePoints = [];
             foreach ($line as $lineNode) {
@@ -268,11 +276,11 @@ class OSM implements GeoAdapter
             }
             $lineStrings[] = new LineString($linePoints);
         }
-        
+
         return $lineStrings;
     }
-    
-    protected function processMultipolygon(&$relationWays, &$nodes)
+
+    protected function processMultipolygon(&$relationWays, array &$nodes)
     {
         /* TODO: what to do with broken rings?
          * I propose to force-close if start -> end point distance is less then 10% of line length, otherwise drop it.
@@ -314,7 +322,7 @@ class OSM implements GeoAdapter
                 // If ring members are not ordered, we need to repeat end matching some times
                 } while ($waysAdded > 0 && $ring[0] !== $ring[count($ring) - 1]);
             }
-            
+
             // Create the new Polygon
             if ($ring[0] === $ring[count($ring) - 1]) {
                 $ringPoints = [];
@@ -338,7 +346,7 @@ class OSM implements GeoAdapter
             }
         }
         $containmentCount = count($containment);
-        
+
         /*
         print '&nbsp; &nbsp;';
         for($i=0; $i<count($rings); $i++) {
@@ -370,7 +378,8 @@ class OSM implements GeoAdapter
                     continue;
                 }
                 $containCount = 0;
-                for ($j = 0; $j < count($containment[$i]); $j++) {
+                $counter = count($containment[$i]);
+                for ($j = 0; $j < $counter; $j++) {
                     if (!$found[$j]) {
                         $containCount += $containment[$j][$i];
                     }
@@ -396,7 +405,7 @@ class OSM implements GeoAdapter
                 }
             }
             if ($round % 2 === 1 || $foundCount === $containmentCount) {
-                foreach ($polygonsRingIds as $k => $ringGroup) {
+                foreach ($polygonsRingIds as $ringGroup) {
                     $linearRings = [];
                     foreach ($ringGroup as $polygonRing) {
                         $linearRings[] = $rings[$polygonRing]->exteriorRing();
@@ -406,20 +415,20 @@ class OSM implements GeoAdapter
             }
             ++$round;
         }
-        
+
         return $relationPolygons;
     }
 
 
 
-    public function write(Geometry $geometry)
+    public function write(Geometry $geometry): string
     {
 
         $this->processGeometry($geometry);
 
         $osm = "<?xml version='1.0' encoding='UTF-8'?>\n<osm version='0.6' upload='false' generator='geoPHP'>\n";
         foreach ($this->nodes as $latlon => $node) {
-            $latlon = explode('_', $latlon);
+            $latlon = explode('_', (string) $latlon);
             $osm .= "  <node id='{$node['id']}' visible='true' lat='$latlon[0]' lon='$latlon[1]' />\n";
         }
         foreach ($this->ways as $wayId => $way) {
@@ -429,9 +438,7 @@ class OSM implements GeoAdapter
             }
             $osm .= "  </way>\n";
         }
-
-        $osm .= "</osm>";
-        return $osm;
+        return $osm . "</osm>";
     }
 
     /**
@@ -475,12 +482,11 @@ class OSM implements GeoAdapter
         if (!isset($this->nodes[$nodePosition])) {
             $this->nodes[$nodePosition] = ['id' => --$this->idCounter, "used" => $isWayPoint];
             return $this->idCounter;
-        } else {
-            if ($isWayPoint) {
-                $this->nodes[$nodePosition]['used'] = true;
-            }
-            return $this->nodes[$nodePosition]['id'];
         }
+        if ($isWayPoint) {
+            $this->nodes[$nodePosition]['used'] = true;
+        }
+        return $this->nodes[$nodePosition]['id'];
     }
 
     /**
@@ -515,11 +521,11 @@ class OSM implements GeoAdapter
         }
     }
 
-    public static function downloadFromOSMByBbox($left, $bottom, $right, $top)
+    public static function downloadFromOSMByBbox($left, $bottom, $right, $top): string|false
     {
         /** @noinspection PhpUnusedParameterInspection */
         set_error_handler(
-            function ($errNO, $errStr, $errFile, $errLine, $errContext) {
+            function ($errNO, $errStr, $errFile, $errLine, array $errContext): void {
                 if (isset($errContext['http_response_header'])) {
                     foreach ($errContext['http_response_header'] as $line) {
                         if (strpos($line, 'Error: ') > -1) {
@@ -538,7 +544,7 @@ class OSM implements GeoAdapter
             return $osmFile;
         } catch (\Exception $e) {
             restore_error_handler();
-            throw new \Exception("Failed to download from OSM. " . $e->getMessage());
+            throw new \Exception("Failed to download from OSM. " . $e->getMessage(), $e->getCode(), $e);
         }
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
-require '../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use \geoPHP\geoPHP;
 
 runTest();
 
-function runTest() {
+function runTest(): void {
   set_time_limit(0);
 
-  set_error_handler("FailOnError");
+  set_error_handler(FailOnError(...));
 
   header("Content-type: text");
 
@@ -24,7 +24,7 @@ function runTest() {
   $start = microtime(true);
   foreach (scandir('./input') as $file) {
     $parts = explode('.', $file);
-    if ($parts[0]) {
+    if ($parts[0] !== '' && $parts[0] !== '0') {
       $startFile = microtime(true);
       $format = $parts[1];
       $value = file_get_contents('./input/' . $file);
@@ -52,7 +52,7 @@ function runTest() {
 /**
  * @param \geoPHP\Geometry\Geometry $geometry
  */
-function test_geometry($geometry) {
+function test_geometry($geometry): void {
   // Test common functions
   $geometry->area();
   try {
@@ -144,7 +144,7 @@ function test_geometry($geometry) {
  * @param string $format
  * @param string $input
  */
-function testAdapters($geometry, $format, $input) {
+function testAdapters($geometry, $format, $input): void {
   // Test adapter output and input. Do a round-trip and re-test
   foreach (geoPHP::getAdapterMap() as $adapter_key => $adapter_class) {
     if ($adapter_key == 'google_geocode') {
@@ -173,7 +173,9 @@ function testAdapters($geometry, $format, $input) {
 
   // Test to make sure adapter work the same wether GEOS is ON or OFF
   // Cannot test methods if GEOS is not intstalled
-  if (!geoPHP::geosInstalled()) return;
+  if (!geoPHP::geosInstalled()) {
+      return;
+  }
   if (getenv("VERBOSE") == 1 || getopt('v')) {
     echo "Testing with GEOS\n";
   }
@@ -211,10 +213,10 @@ function testAdapters($geometry, $format, $input) {
           //var_dump($test_geom_1->out('wkt'), $test_geom_2->out('wkt'));
 
           $f = fopen('test_geom1.wkt', 'w+');
-          fwrite($f, $test_geom_1->out('wkt'));
+          fwrite($f, (string) $test_geom_1->out('wkt'));
           fclose($f);
           $f = fopen('test_geom2.wkt', 'w+');
-          fwrite($f, $test_geom_2->out('wkt'));
+          fwrite($f, (string) $test_geom_2->out('wkt'));
           fclose($f);
           print "Mismatched adapter output between GEOS and NORM in " . $adapter_class . "\n";
         }
@@ -228,11 +230,13 @@ function testAdapters($geometry, $format, $input) {
 }
 
 
-function testGeosMethods($geometry) {
+function testGeosMethods($geometry): void {
   // Cannot test methods if GEOS is not intstalled
-  if (!geoPHP::geosInstalled()) return;
+  if (!geoPHP::geosInstalled()) {
+      return;
+  }
 
-  $methods = array(
+  $methods = [
     'boundary',
     'envelope',
     'getBoundingBox',
@@ -249,7 +253,7 @@ function testGeosMethods($geometry) {
     'length',
     'isEmpty',
     'isSimple'
-  );
+  ];
 
   foreach ($methods as $method) {
     try {
@@ -270,36 +274,29 @@ function testGeosMethods($geometry) {
       $geos_type = gettype($geos_result);
       $norm_type = gettype($norm_result);
 
-      if ($geos_type != $norm_type) {
+      if ($geos_type !== $norm_type) {
         print "\e[33m" . "Type mismatch on " . $method . "\e[39m\n";
         continue;
       }
-
       // Now check base on type
-      if ($geos_type == 'object') {
-        $haus_dist = $geos_result->hausdorffDistance(geoPHP::load($norm_result->out('wkt'),'wkt'));
-
-        // Get the length of the diagonal of the bbox - this is used to scale the haustorff distance
-        // Using Pythagorean theorem
-        $bb = $geos_result->getBoundingBox();
-        $scale = sqrt((($bb['maxy'] - $bb['miny'])^2) + (($bb['maxx'] - $bb['minx'])^2));
-
-        // The difference in the output of GEOS and native-PHP methods should be less than 0.5 scaled haustorff units
-        if ($haus_dist / $scale > 0.5) {
-          print "\e[33m" . "Output mismatch on " . $method . "\e[39m\n";
-          print 'GEOS : '.$geos_result->out('wkt')."\n";
-          print 'NORM : '.$norm_result->out('wkt')."\n";
-          continue;
-        }
+      $haus_dist = $geos_result->hausdorffDistance(geoPHP::load($norm_result->out('wkt'),'wkt'));
+      // Get the length of the diagonal of the bbox - this is used to scale the haustorff distance
+      // Using Pythagorean theorem
+      $bb = $geos_result->getBoundingBox();
+      $scale = sqrt((($bb['maxy'] - $bb['miny'])^2) + (($bb['maxx'] - $bb['minx'])^2));
+      // The difference in the output of GEOS and native-PHP methods should be less than 0.5 scaled haustorff units
+      if ($haus_dist / $scale > 0.5) {
+        print "\e[33m" . "Output mismatch on " . $method . "\e[39m\n";
+        print 'GEOS : '.$geos_result->out('wkt')."\n";
+        print 'NORM : '.$norm_result->out('wkt')."\n";
+        continue;
       }
 
-      if ($geos_type == 'boolean' || $geos_type == 'string') {
-        if ($geos_result !== $norm_result) {
+      if (($geos_type === 'boolean' || $geos_type === 'string') && $geos_result !== $norm_result) {
           print "\e[33m" . "Output mismatch on " . $method . "\e[39m\n";
-          print 'GEOS : '.(string) $geos_result."\n";
-          print 'NORM : '.(string) $norm_result."\n";
+          print 'GEOS : '.$geos_result."\n";
+          print 'NORM : '.$norm_result."\n";
           continue;
-        }
       }
     } catch (\geoPHP\Exception\UnsupportedMethodException $e) {
       if (getenv("VERBOSE") == 1 || getopt('v')) {
@@ -312,7 +309,7 @@ function testGeosMethods($geometry) {
   }
 }
 
-function testDetection($value, $format) {
+function testDetection($value, $format): void {
   $detected = geoPHP::detectFormat($value);
   if ($detected != $format) {
     if ($detected) {
@@ -325,7 +322,7 @@ function testDetection($value, $format) {
   geoPHP::load($value);
 }
 
-function FailOnError($error_level, $error_message, $error_file, $error_line, $error_context) {
+function FailOnError($error_level, $error_message, $error_file, $error_line, $error_context = []): never {
   echo "$error_level: $error_message in $error_file on line $error_line\n";
   echo "\e[31m" . "FAIL" . "\e[39m\n";
   exit(1);

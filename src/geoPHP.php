@@ -41,7 +41,7 @@ class geoPHP
 
     const CLASS_NAMESPACE = 'geoPHP\\';
 
-    private static $adapterMap = [
+    private static array $adapterMap = [
             'wkt'            => 'WKT',
             'ewkt'           => 'EWKT',
             'wkb'            => 'WKB',
@@ -57,12 +57,12 @@ class geoPHP
             'osm'            => 'OSM',
     ];
 
-    public static function getAdapterMap()
+    public static function getAdapterMap(): array
     {
         return self::$adapterMap;
     }
 
-    private static $geometryList = [
+    private static array $geometryList = [
             'point'              => 'Point',
             'linestring'         => 'LineString',
             'polygon'            => 'Polygon',
@@ -72,7 +72,7 @@ class geoPHP
             'geometrycollection' => 'GeometryCollection',
     ];
 
-    public static function getGeometryList()
+    public static function getGeometryList(): array
     {
         return self::$geometryList;
     }
@@ -94,15 +94,13 @@ class geoPHP
         $args = func_get_args();
 
         $data = array_shift($args);
-        $type = count($args) && @array_key_exists($args[0], self::$adapterMap) ? strtolower(array_shift($args)) : null;
+        $type = count($args) && @array_key_exists($args[0], self::$adapterMap) ? strtolower((string) array_shift($args)) : null;
 
         // Auto-detect type if needed
         if (!$type) {
             // If the user is trying to load a Geometry from a Geometry... Just pass it back
-            if (is_object($data)) {
-                if ($data instanceof Geometry) {
-                    return $data;
-                }
+            if ($data instanceof Geometry) {
+                return $data;
             }
 
             $detected = geoPHP::detectFormat($data);
@@ -120,19 +118,17 @@ class geoPHP
         $adapterType = self::CLASS_NAMESPACE . 'Adapter\\' . self::$adapterMap[$type];
 
         $adapter = new $adapterType();
-
         // Data is not an array, just pass it normally
         if (!is_array($data)) {
-            $result = call_user_func_array([$adapter, "read"], array_merge([$data], $args));
-        } else { // Data is an array, combine all passed in items into a single geometry
-            $geometries = [];
-            foreach ($data as $item) {
-                $geometries[] = call_user_func_array([$adapter, "read"], array_merge($item, $args));
-            }
-            $result = geoPHP::buildGeometry($geometries);
+            return call_user_func_array([$adapter, "read"], array_merge([$data], $args));
+        }
+        // Data is an array, combine all passed in items into a single geometry
+        $geometries = [];
+        foreach ($data as $item) {
+            $geometries[] = call_user_func_array([$adapter, "read"], array_merge($item, $args));
         }
 
-        return $result;
+        return geoPHP::buildGeometry($geometries);
     }
 
     public static function geosInstalled($force = null)
@@ -202,15 +198,14 @@ class geoPHP
 
             // If it is a multi-geometry, check to see if it just has one member
             // If it does, then pass the member, if not, then just pass back the geometry
-            if (strpos($geometries->geometryType(), 'Multi') === 0) {
+            if (str_starts_with($geometries->geometryType(), 'Multi')) {
                 $components = $geometries->getComponents();
-                if (count($components) == 1) {
+                if (count($components) === 1) {
                     return $components[0];
-                } else {
-                    return $geometries;
                 }
+                return $geometries;
             }
-        } elseif (is_array($geometries) && count($geometries) == 1) {
+        } elseif (is_array($geometries) && count($geometries) === 1) {
             // If it's an array of one, then just parse the one
             return geoPHP::geometryReduce(array_shift($geometries));
         }
@@ -228,31 +223,29 @@ class geoPHP
         self::explodeCollections($geometries, $reducedGeometries, $geometryTypes);
 
         $geometryTypes = array_unique($geometryTypes);
-        if (empty($geometryTypes)) {
+        if ($geometryTypes === []) {
             return false;
         }
-        if (count($geometryTypes) == 1) {
-            if (count($reducedGeometries) == 1) {
+        if (count($geometryTypes) === 1) {
+            if (count($reducedGeometries) === 1) {
                 return $reducedGeometries[0];
-            } else {
-                $class = self::CLASS_NAMESPACE .
-                    'Geometry\\' .
-                    (strstr($geometryTypes[0], 'Multi') ? '' : 'Multi') .
-                    $geometryTypes[0];
-                return new $class($reducedGeometries);
             }
-        } else {
-            return new GeometryCollection($reducedGeometries);
+            $class = self::CLASS_NAMESPACE .
+                'Geometry\\' .
+                (strstr($geometryTypes[0], 'Multi') ? '' : 'Multi') .
+                $geometryTypes[0];
+            return new $class($reducedGeometries);
         }
+        return new GeometryCollection($reducedGeometries);
     }
 
     /**
      * @param Geometry[]|GeometryCollection[] $unreduced
      */
-    private static function explodeCollections($unreduced, &$reduced, &$types)
+    private static function explodeCollections($unreduced, &$reduced, &$types): void
     {
         foreach ($unreduced as $item) {
-            if ($item->geometryType() == 'GeometryCollection' || strpos($item->geometryType(), 'Multi') === 0) {
+            if ($item->geometryType() == 'GeometryCollection' || str_starts_with($item->geometryType(), 'Multi')) {
                 self::explodeCollections($item->getComponents(), $reduced, $types);
             } else {
                 $reduced[] = $item;
@@ -275,14 +268,16 @@ class geoPHP
         if (empty($geometries)) {
             return new GeometryCollection();
         }
-
         /* If it is a single geometry */
         if ($geometries instanceof Geometry) {
             return $geometries;
-        } elseif (!is_array($geometries)) {
+        }
+
+        /* If it is a single geometry */
+        if (!is_array($geometries)) {
             return null;
             //FIXME should be: throw new \Exception('Input is not a Geometry or array of Geometries');
-        } elseif (count($geometries) == 1) {
+        } elseif (count($geometries) === 1) {
             // If it's an array of one, then just parse the one
             return geoPHP::buildGeometry(array_shift($geometries));
         }
@@ -303,29 +298,27 @@ class geoPHP
             }
         }
         $geometryTypes = array_unique($geometryTypes);
-        if (empty($geometryTypes)) {
+        if ($geometryTypes === []) {
             return null;
             // FIXME normally it never happens. Should be refactored
         }
-        if (count($geometryTypes) == 1 && !$hasData) {
+        if (count($geometryTypes) === 1 && !$hasData) {
             if ($geometryTypes[0] === Geometry::GEOMETRY_COLLECTION) {
                 return new GeometryCollection($geometries);
             }
-            if (count($geometries) == 1) {
+            if (count($geometries) === 1) {
                 return $geometries[0];
-            } else {
-                $newType = (strpos($geometryTypes[0], 'Multi') !== false ? '' : 'Multi') . $geometryTypes[0];
-                foreach ($geometries as $geometry) {
-                    if ($geometry->isEmpty()) {
-                        return new GeometryCollection($geometries);
-                    }
-                }
-                $class = self::CLASS_NAMESPACE . 'Geometry\\' . $newType;
-                return new $class($geometries);
             }
-        } else {
-            return new GeometryCollection($geometries);
+            $newType = (str_contains($geometryTypes[0], 'Multi') ? '' : 'Multi') . $geometryTypes[0];
+            foreach ($geometries as $geometry) {
+                if ($geometry->isEmpty()) {
+                    return new GeometryCollection($geometries);
+                }
+            }
+            $class = self::CLASS_NAMESPACE . 'Geometry\\' . $newType;
+            return new $class($geometries);
         }
+        return new GeometryCollection($geometries);
     }
 
     /**
@@ -348,12 +341,12 @@ class geoPHP
         $bytes = unpack("c*", $bin);
 
         // If bytes is empty, then we were passed empty input
-        if (empty($bytes)) {
+        if ($bytes === [] || $bytes === false) {
             return false;
         }
 
         // First char is a tab, space or carriage-return. trim it and try again
-        if ($bytes[1] == 9 || $bytes[1] == 10 || $bytes[1] == 32) {
+        if (in_array($bytes[1], [9, 10, 32])) {
             $input = ltrim($input);
             return geoPHP::detectFormat($input);
         }
@@ -365,9 +358,8 @@ class geoPHP
                 // If SRID byte is TRUE (1), it's EWKB
                 if (($wkbType & Adapter\WKB::SRID_MASK) === Adapter\WKB::SRID_MASK) {
                     return 'ewkb';
-                } else {
-                    return 'wkb';
                 }
+                return 'wkb';
             }
         }
 
@@ -375,11 +367,10 @@ class geoPHP
         // The shortest possible WKB string (LINESTRING EMPTY) is 18 hex-chars (9 encoded bytes) long
         // This differentiates it from a geohash, which is always shorter than 13 characters.
         if ($bytes[1] == 48 && ($bytes[2] == 49 || $bytes[2] == 48) && strlen($input) > 12) {
-            if ((current(unpack($bytes[2] == 49 ? 'V' : 'N', hex2bin(substr($bin, 2, 8)))) & Adapter\WKB::SRID_MASK) == Adapter\WKB::SRID_MASK) {
+            if ((current(unpack($bytes[2] == 49 ? 'V' : 'N', hex2bin(substr($bin, 2, 8)))) & Adapter\WKB::SRID_MASK) === Adapter\WKB::SRID_MASK) {
                 return 'ewkb:true';
-            } else {
-                return 'wkb:true';
             }
+            return 'wkb:true';
         }
 
         // Detect GeoJSON - first char starts with {
@@ -388,7 +379,7 @@ class geoPHP
         }
 
         // Detect EWKT - strats with "SRID=number;"
-        if (substr($input, 0, 5) === 'SRID=') {
+        if (str_starts_with($input, 'SRID=')) {
             return 'ewkt';
         }
 
@@ -401,16 +392,16 @@ class geoPHP
         if ($bytes[1] == 60) {
             // grab the first 1024 characters
             $string = substr($input, 0, 1024);
-            if (strpos($string, '<kml') !== false) {
+            if (str_contains($string, '<kml')) {
                 return 'kml';
             }
-            if (strpos($string, '<coordinate') !== false) {
+            if (str_contains($string, '<coordinate')) {
                 return 'kml';
             }
-            if (strpos($string, '<gpx') !== false) {
+            if (str_contains($string, '<gpx')) {
                 return 'gpx';
             }
-            if (strpos($string, '<osm ') !== false) {
+            if (str_contains($string, '<osm ')) {
                 return 'osm';
             }
             if (preg_match('/<[a-z]{3,20}>/', $string) !== false) {
@@ -431,9 +422,8 @@ class geoPHP
         preg_match('/^[a-f0-9]+$/', $string, $matches);
         if (isset($matches[0])) {
             return 'twkb:true';
-        } else {
-            return 'twkb';
         }
+        return 'twkb';
 
         // What do you get when you cross an elephant with a rhino?
         // http://youtu.be/RCBn5J83Poc

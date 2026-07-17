@@ -11,7 +11,6 @@ namespace geoPHP\Adapter;
  */
 class GpxTypes
 {
-
     // TODO: convert these static properties to constants once HHVM fixes this bug: https://github.com/facebook/hhvm/issues/4277
 
     /**
@@ -107,10 +106,10 @@ class GpxTypes
         if (is_array($allowedElements)) {
             foreach ($allowedElements as $type => $elements) {
                 $elements = is_array($elements) ? $elements : [$elements];
-                $this->{'allowed' . ucfirst($type) . 'Elements'} = [];
+                $this->{'allowed' . ucfirst((string) $type) . 'Elements'} = [];
                 foreach ($this::${$type . 'Elements'} as $availableType) {
                     if (in_array($availableType, $elements)) {
-                        $this->{'allowed' . ucfirst($type) . 'Elements'}[] = $availableType;
+                        $this->{'allowed' . ucfirst((string) $type) . 'Elements'}[] = $availableType;
                     }
                 }
             }
@@ -127,9 +126,6 @@ class GpxTypes
     public function get($type)
     {
         $propertyName = 'allowed' . ucfirst($type) . 'Elements';
-        if (isset($this->{$propertyName})) {
-            return $this->{$propertyName};
-        }
-        return [];
+        return $this->{$propertyName} ?? [];
     }
 }

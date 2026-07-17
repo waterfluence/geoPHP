@@ -9,7 +9,6 @@ use geoPHP\geoPHP;
  */
 class GeometryCollection extends MultiGeometry
 {
-
     /**
      * @param Geometry[] $components Array of geometries. Components of GeometryCollection can be
      *     any of valid Geometry types, including empty geometry
@@ -21,7 +20,7 @@ class GeometryCollection extends MultiGeometry
         parent::__construct($components, true);
     }
 
-    public function geometryType()
+    public function geometryType(): string
     {
         return Geometry::GEOMETRY_COLLECTION;
     }
@@ -42,9 +41,8 @@ class GeometryCollection extends MultiGeometry
 
     /**
      * Not valid for this geometry type
-     * @return null
      */
-    public function isSimple()
+    public function isSimple(): null
     {
         return null;
     }
@@ -103,10 +101,8 @@ class GeometryCollection extends MultiGeometry
      * We need to do this because, for example, there would be no way to tell the difference between a
      * MultiPoint or a LineString, since they share the same structure (collection
      * of points). So we need to call out the type explicitly.
-     *
-     * @return array
      */
-    public function asArray()
+    public function asArray(): array
     {
         $array = [];
         foreach ($this->getComponents() as $component) {
@@ -121,7 +117,7 @@ class GeometryCollection extends MultiGeometry
     /**
      * @return Geometry[]|Collection[]
      */
-    public function explodeGeometries()
+    public function explodeGeometries(): array
     {
         $geometries = [];
         foreach ($this->components as $component) {
@@ -136,7 +132,7 @@ class GeometryCollection extends MultiGeometry
     }
 
     // Not valid for this geometry
-    public function boundary()
+    public function boundary(): null
     {
         return null;
     }

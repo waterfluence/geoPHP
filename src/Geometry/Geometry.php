@@ -25,7 +25,6 @@ use geoPHP\geoPHP;
  */
 abstract class Geometry
 {
-
     /**
      * Type constants
      */
@@ -59,7 +58,7 @@ abstract class Geometry
     protected $isMeasured = false;
 
     /** @var int|null $srid Spatial Reference System Identifier (http://en.wikipedia.org/wiki/SRID) */
-    protected $srid = null;
+    protected $srid;
 
     /**
      * @var mixed|null Custom (meta)data
@@ -69,7 +68,7 @@ abstract class Geometry
     /**
      * @var \GEOSGeometry|null|false
      */
-    private $geos = null;
+    private $geos;
 
 
 
@@ -279,7 +278,7 @@ abstract class Geometry
     /**
      * @param int $srid Spatial Reference System Identifier
      */
-    public function setSRID($srid)
+    public function setSRID($srid): void
     {
         if ($this->getGeos()) {
             // @codeCoverageIgnoreStart
@@ -296,7 +295,7 @@ abstract class Geometry
      * @param string|array $property The name of the data or an associative array
      * @param mixed|null $value The data. Can be any type (string, integer, array, etc.)
      */
-    public function setData($property, $value = null)
+    public function setData($property, $value = null): void
     {
         if (is_array($property)) {
             $this->data = $property;
@@ -315,9 +314,8 @@ abstract class Geometry
     {
         if ($property) {
             return $this->hasDataProperty($property) ? $this->data[$property] : null;
-        } else {
-            return $this->data;
         }
+        return $this->data;
     }
 
     /**
@@ -366,7 +364,7 @@ abstract class Geometry
     {
         $args = func_get_args();
 
-        $format = strtolower(array_shift($args));
+        $format = strtolower((string) array_shift($args));
         if (strstr($format, 'xdr')) {   //Big Endian WKB
             $args[] = true;
             $format = str_replace('xdr', '', $format);
@@ -376,10 +374,7 @@ abstract class Geometry
         $processor = new $processorType();
         array_unshift($args, $this);
 
-
-        $result = call_user_func_array([$processor, 'write'], $args);
-
-        return $result;
+        return call_user_func_array([$processor, 'write'], $args);
     }
 
     public function coordinateDimension()
@@ -514,7 +509,7 @@ abstract class Geometry
         return $this->geos;
     }
 
-    public function setGeos($geos)
+    public function setGeos($geos): void
     {
         $this->geos = $geos;
     }
@@ -538,7 +533,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return bool
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -553,7 +547,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @param string|null $pattern
      * @return string|null
      * @throws UnsupportedMethodException
@@ -565,10 +558,9 @@ abstract class Geometry
             if ($pattern) {
                 /** @noinspection PhpUndefinedMethodInspection */
                 return $this->getGeos()->relate($geometry->getGeos(), $pattern);
-            } else {
-                /** @noinspection PhpUndefinedMethodInspection */
-                return $this->getGeos()->relate($geometry->getGeos());
             }
+            /** @noinspection PhpUndefinedMethodInspection */
+            return $this->getGeos()->relate($geometry->getGeos());
         }
         throw UnsupportedMethodException::geos(__METHOD__);
     }
@@ -588,12 +580,11 @@ abstract class Geometry
     }
 
     /**
-     * @param float|int $distance
      * @return Geometry|null
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
      */
-    public function buffer($distance)
+    public function buffer(float $distance)
     {
         if ($this->getGeos()) {
             /** @noinspection PhpUndefinedMethodInspection */
@@ -603,7 +594,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return Geometry|null
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -632,7 +622,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return Geometry|null
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -647,7 +636,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return Geometry|null
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -664,7 +652,6 @@ abstract class Geometry
     /**
      * Can pass in a geometry or an array of geometries
      *
-     * @param Geometry $geometry
      * @return bool|mixed|null|GeometryCollection
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -679,22 +666,19 @@ abstract class Geometry
                     $geom = $geom->union($item->geos());
                 }
                 return geoPHP::geosToGeometry($geom);
-            } else {
-                /** @noinspection PhpUndefinedMethodInspection */
-                return geoPHP::geosToGeometry($this->getGeos()->union($geometry->getGeos()));
             }
+            /** @noinspection PhpUndefinedMethodInspection */
+            return geoPHP::geosToGeometry($this->getGeos()->union($geometry->getGeos()));
         }
         throw UnsupportedMethodException::geos(__METHOD__);
     }
 
     /**
-     * @param float      $tolerance
-     * @param bool|false $preserveTopology
      * @return Geometry|null
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
      */
-    public function simplify($tolerance, $preserveTopology = false)
+    public function simplify(float $tolerance, bool $preserveTopology = false)
     {
         if ($this->getGeos()) {
             /** @noinspection PhpUndefinedMethodInspection */
@@ -732,7 +716,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return bool
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -747,7 +730,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return bool
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -762,7 +744,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return bool
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -777,7 +758,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return bool
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -792,7 +772,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return bool
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -807,7 +786,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return bool
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -822,7 +800,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return bool
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -837,7 +814,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return bool
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -852,7 +828,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return bool
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -867,7 +842,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $geometry
      * @return float
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
@@ -882,8 +856,6 @@ abstract class Geometry
     }
 
     /**
-     * @param Geometry $point
-     * @param null     $normalized
      * @return \GEOSGeometry
      * @throws UnsupportedMethodException
      * @codeCoverageIgnore
